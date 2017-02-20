@@ -39,13 +39,14 @@ public class CreateSession extends javax.swing.JPanel {
     
     public CreateSession() {
         initComponents();
-        for (Map.Entry<String, ArrayList<java.util.Date>> entry : SessionsInTheRoom.getXML().getOccupied().entrySet()) {
-            String key = entry.getKey();
-            if (key.equals(WindowManager.getTmpArtist().getAlphaCode())) {
-                ArrayList<java.util.Date> value = entry.getValue();
-                jXDatePicker1.getMonthView().setUnselectableDates(value.toArray(new java.util.Date[value.size()]));
+        if (WindowManager.getTmpArtist() != null) {
+            for (Map.Entry<String, ArrayList<java.util.Date>> entry : SessionsInTheRoom.getXML().getOccupied().entrySet()) {
+                String key = entry.getKey();
+                if (key.equals(WindowManager.getTmpArtist().getAlphaCode())) {
+                    ArrayList<java.util.Date> value = entry.getValue();
+                    jXDatePicker1.getMonthView().setUnselectableDates(value.toArray(new java.util.Date[value.size()]));
+                }
             }
-            
         }
         csController = new CreateSessionControll();
         

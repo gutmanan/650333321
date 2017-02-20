@@ -9,6 +9,7 @@ import businessLogic.DBManager;
 import entity.Artist;
 import businessLogic.SessionsInTheRoom;
 import businessLogic.WindowManager;
+import entity.Freelancer;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.ItemEvent;
@@ -356,9 +357,9 @@ public class MainLogin extends javax.swing.JFrame {
         Integer birthDay = Integer.parseInt(String.valueOf(dayBox.getSelectedItem()));
         Date birthdate = new Date(birthYear, birthMonth, birthDay);
         Timestamp ts = new Timestamp(birthdate.getTime());
-        String qry = "INSERT INTO tblUser (userAlphaCode, firstName, lastName, nickname, birthday, email, image, password)"
-        + "VALUES('"+username+"','"+firstname+"','"+lastname+"','"+nickname+"',\""+ts+"\",'"+email+"',\""+profileLabel.getIcon()+"\",'"+password+"')";
-        if (DBManager.insert(qry) == -2) {
+        String qry = "INSERT INTO tblFreelancer (FreelancerID, firstName, lastName, birthDate, eMail, stageName, Photo, password)"
+        + "VALUES('"+username+"','"+firstname+"','"+lastname+"','"+ts+"',\""+email+"\",'"+nickname+"',\""+profileLabel.getIcon()+"\",'"+password+"')";
+        if (DBManager.insert(qry) > -1) {
             JOptionPane.showMessageDialog(newAccountFrame,
                 "Congratulations your account was created successfully!",
                 "Account was created",
@@ -439,6 +440,9 @@ public class MainLogin extends javax.swing.JFrame {
             ResultSet artists = SessionsInTheRoom.getDB().query("SELECT tblArtist.*\n" +
                                                                "FROM tblArtist\n" +
                                                                "WHERE tblArtist.eMail=\""+usernameArea.getText()+"\"");
+            ResultSet freelancers = SessionsInTheRoom.getDB().query("SELECT tblFreelancer.*\n" +
+                                                               "FROM tblFreelancer\n" +
+                                                               "WHERE tblFreelancer.eMail=\""+usernameArea.getText()+"\"");
             try {
                 while (artists.next()) {
                     if (artists.getString(4).equals(passwordArea.getText())) {
@@ -449,15 +453,15 @@ public class MainLogin extends javax.swing.JFrame {
                         return;
                     }
                 }
-                /*while (users.next()) {
-                    if (users.getString(8).equals(passwordArea.getText())) {
-                        WindowManager.setUser(3, new User(users.getString(1), users.getString(2), users.getString(3), 
-                                                        users.getString(4), users.getDate(5), users.getString(6), users.getString(8)));
+                while (freelancers.next()) {
+                    if (freelancers.getString(8).equals(passwordArea.getText())) {
+                        WindowManager.setUser(3, new Freelancer(freelancers.getString(1), freelancers.getString(2), freelancers.getString(3), 
+                                                        freelancers.getDate(4), freelancers.getString(5), freelancers.getString(6), freelancers.getString(8)));
                         this.dispose();
                         WindowManager.startMain();
                         return;
                     }
-                }*/
+                }
             } catch (SQLException ex) {
                 Logger.getLogger(MainLogin.class.getName()).log(Level.SEVERE, null, ex);
             }

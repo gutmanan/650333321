@@ -3,17 +3,20 @@ package businessLogic;
 import entity.Artist;
 import boundary.MainGui;
 import boundary.MainLogin;
+import entity.Freelancer;
 import java.awt.Color;
 import java.sql.SQLException;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.transaction.xa.XAResource;
 
 public abstract class WindowManager {
 
     private static int authLogged;
     protected static Artist tmpArtist = null;
+    protected static Freelancer tmpFreelancer = null;
     protected static JLabel welcome = null;
 
     //Window Management
@@ -100,6 +103,9 @@ public abstract class WindowManager {
             case 2:
                 toReturn = "Muza Representative";
                 break;
+            case 3:
+                toReturn = "Freelancer";
+                break;
             default:
                 toReturn = "ERROR";
                 break;
@@ -129,6 +135,10 @@ public abstract class WindowManager {
                 break;
             case 2:
                 tmpArtist = null;
+                tmpFreelancer = null;
+                break;
+            case 3:
+                tmpFreelancer = (Freelancer)user;
                 break;
             default:
                 System.err.println("ERROR");
@@ -145,11 +155,16 @@ public abstract class WindowManager {
         return tmpArtist;
     }
 
+    public static Freelancer getTmpFreelancer() {
+        return tmpFreelancer;
+    }
+
     public static void clean() {
         authLogged = 0;
         currentWindow = null;
         welcome = null;
         tmpArtist = null;
+        tmpFreelancer = null;
     }
 
     public static void update() {
@@ -171,9 +186,11 @@ public abstract class WindowManager {
         welcome.setForeground(new java.awt.Color(255, 255, 255));
         mainFrame.getContentPane().add(welcome, mainFrame.getContentPane().countComponents()-1);
         welcome.setBounds(400, 30, 500, 50);
-        if (getTmpArtist()!= null)
+        if (getTmpArtist() != null)
             welcome.setText("Welcome "+getTmpArtist().getStageName());
-        else if (getTmpArtist() == null)
+        else if (getTmpFreelancer() != null)
+            welcome.setText("Welcome "+getTmpFreelancer().getFreelancerName());
+        else if (getTmpArtist() == null || getTmpFreelancer() == null)
             welcome.setText("Welcome "+getAuthType());
     }
 }

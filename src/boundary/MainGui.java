@@ -40,13 +40,14 @@ public class MainGui extends JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton7 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
+        genericButton3 = new javax.swing.JButton();
+        arrowButton = new javax.swing.JButton();
+        userButton = new javax.swing.JButton();
+        logoutButton = new javax.swing.JButton();
+        exitButton = new javax.swing.JButton();
+        genericButton2 = new javax.swing.JButton();
+        genericButton1 = new javax.swing.JButton();
+        wallpaper = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(1205, 725));
@@ -55,120 +56,142 @@ public class MainGui extends JFrame {
         setResizable(false);
         getContentPane().setLayout(null);
 
-        jButton7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/arrowBtn.png"))); // NOI18N
-        jButton7.setBorder(null);
-        jButton7.setBorderPainted(false);
-        jButton7.setContentAreaFilled(false);
-        jButton7.addActionListener(new java.awt.event.ActionListener() {
+        if (WindowManager.getAuthValue() == 2)
+        genericButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/addRoomBtn.png"))); // NOI18N
+        genericButton3.setBorderPainted(false);
+        genericButton3.setContentAreaFilled(false);
+        genericButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton7ActionPerformed(evt);
+                genericButton3ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton7);
-        jButton7.setBounds(110, 610, 80, 65);
+        getContentPane().add(genericButton3);
+        genericButton3.setBounds(-20, 340, 216, 39);
+
+        arrowButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/arrowBtn.png"))); // NOI18N
+        arrowButton.setBorder(null);
+        arrowButton.setBorderPainted(false);
+        arrowButton.setContentAreaFilled(false);
+        arrowButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                arrowButtonActionPerformed(evt);
+            }
+        });
+        getContentPane().add(arrowButton);
+        arrowButton.setBounds(70, 610, 80, 65);
 
         if (WindowManager.getAuthValue() == 1)
-        jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/artistBtn.png"))); // NOI18N
+        userButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/artistBtn.png"))); // NOI18N
         if (WindowManager.getAuthValue() == 2)
-        jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/repBtn.png"))); // NOI18N
-        jButton6.setBorder(null);
-        jButton6.setBorderPainted(false);
-        jButton6.setContentAreaFilled(false);
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
+        userButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/repBtn.png"))); // NOI18N
+        if (WindowManager.getAuthValue() == 3)
+        userButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/freelancerBtn.png"))); // NOI18N
+        userButton.setBorder(null);
+        userButton.setBorderPainted(false);
+        userButton.setContentAreaFilled(false);
+        userButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
+                userButtonActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton6);
-        jButton6.setBounds(1070, 520, 130, 40);
+        getContentPane().add(userButton);
+        userButton.setBounds(1070, 520, 130, 40);
 
-        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/logoutBtn.png"))); // NOI18N
-        jButton5.setBorder(null);
-        jButton5.setBorderPainted(false);
-        jButton5.setContentAreaFilled(false);
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        logoutButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/logoutBtn.png"))); // NOI18N
+        logoutButton.setBorder(null);
+        logoutButton.setBorderPainted(false);
+        logoutButton.setContentAreaFilled(false);
+        logoutButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                logoutButtonActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton5);
-        jButton5.setBounds(1070, 565, 130, 40);
+        getContentPane().add(logoutButton);
+        logoutButton.setBounds(1070, 565, 130, 40);
 
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/exitBtn.png"))); // NOI18N
-        jButton4.setBorder(null);
-        jButton4.setBorderPainted(false);
-        jButton4.setContentAreaFilled(false);
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        exitButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/exitBtn.png"))); // NOI18N
+        exitButton.setBorder(null);
+        exitButton.setBorderPainted(false);
+        exitButton.setContentAreaFilled(false);
+        exitButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                exitButtonActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton4);
-        jButton4.setBounds(1070, 610, 130, 40);
+        getContentPane().add(exitButton);
+        exitButton.setBounds(1070, 610, 130, 40);
 
         if (WindowManager.getAuthValue() == 1)
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/viewSessionBtn.png"))); // NOI18N
+        genericButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/viewSessionBtn.png"))); // NOI18N
         if (WindowManager.getAuthValue() == 2)
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/viewStudioBtn.png"))); // NOI18N
-        jButton2.setBorderPainted(false);
-        jButton2.setContentAreaFilled(false);
-        jButton2.setDisabledIcon(null);
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        genericButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/viewStudioBtn.png"))); // NOI18N
+        if (WindowManager.getAuthValue() == 3)
+        genericButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/addStudioBtn.png"))); // NOI18N
+        genericButton2.setBorderPainted(false);
+        genericButton2.setContentAreaFilled(false);
+        genericButton2.setDisabledIcon(null);
+        genericButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                genericButton2ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton2);
-        jButton2.setBounds(-20, 300, 216, 39);
+        getContentPane().add(genericButton2);
+        genericButton2.setBounds(-20, 300, 216, 39);
 
         if (WindowManager.getAuthValue() == 1)
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/createSessionBtn.png"))); // NOI18N
+        genericButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/createSessionBtn.png"))); // NOI18N
         if (WindowManager.getAuthValue() == 2)
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/createStudioBtn.png"))); // NOI18N
-        jButton1.setBorderPainted(false);
-        jButton1.setContentAreaFilled(false);
-        jButton1.setDisabledIcon(null);
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        genericButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/createStudioBtn.png"))); // NOI18N
+        if (WindowManager.getAuthValue() == 3)
+        genericButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/addQualificationBtn.png"))); // NOI18N
+        genericButton1.setBorderPainted(false);
+        genericButton1.setContentAreaFilled(false);
+        genericButton1.setDisabledIcon(null);
+        genericButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                genericButton1ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton1);
-        jButton1.setBounds(-20, 260, 216, 39);
+        getContentPane().add(genericButton1);
+        genericButton1.setBounds(-20, 260, 216, 39);
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/SessionBack.png"))); // NOI18N
-        getContentPane().add(jLabel1);
-        jLabel1.setBounds(0, 0, 1200, 700);
+        wallpaper.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/SessionBack.png"))); // NOI18N
+        getContentPane().add(wallpaper);
+        wallpaper.setBounds(0, 0, 1200, 700);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        WindowManager.openWin(new CreateSession());
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void genericButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_genericButton1ActionPerformed
+        setWindows(new CreateSession(), new CreateStudio(), null);
+    }//GEN-LAST:event_genericButton1ActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
         System.exit(1);
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_exitButtonActionPerformed
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void logoutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutButtonActionPerformed
         this.dispose();
         WindowManager.openLogin();
-    }//GEN-LAST:event_jButton5ActionPerformed
+    }//GEN-LAST:event_logoutButtonActionPerformed
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+    private void userButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userButtonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton6ActionPerformed
+    }//GEN-LAST:event_userButtonActionPerformed
 
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+    private void arrowButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_arrowButtonActionPerformed
         WindowManager.returnWindow();
-    }//GEN-LAST:event_jButton7ActionPerformed
+    }//GEN-LAST:event_arrowButtonActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void genericButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_genericButton2ActionPerformed
         
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_genericButton2ActionPerformed
 
-    private void setWindows(JPanel p1, JPanel p2, JPanel p3, JPanel p4) {
+    private void genericButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_genericButton3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_genericButton3ActionPerformed
+
+    private void setWindows(JPanel p1, JPanel p2, JPanel p3) {
         switch (WindowManager.getAuthValue()) {
             case 1:
                 WindowManager.openWin(p1);
@@ -176,18 +199,22 @@ public class MainGui extends JFrame {
             case 2:
                 WindowManager.openWin(p2);
                 break;
+            case 3:
+                WindowManager.openWin(p3);
+                break;
             default:
                 break;
         }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton arrowButton;
+    private javax.swing.JButton exitButton;
+    private javax.swing.JButton genericButton1;
+    private javax.swing.JButton genericButton2;
+    private javax.swing.JButton genericButton3;
+    private javax.swing.JButton logoutButton;
+    private javax.swing.JButton userButton;
+    private javax.swing.JLabel wallpaper;
     // End of variables declaration//GEN-END:variables
 }

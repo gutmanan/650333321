@@ -35,6 +35,7 @@ public abstract class DebugManager extends javax.swing.JFrame {
         xmlstatusLabel = new javax.swing.JLabel();
         objectsCounterLabel = new javax.swing.JLabel();
         counterLabel = new javax.swing.JLabel();
+        freelancerBtn = new javax.swing.JButton();
         artistBtn = new javax.swing.JButton();
         adminBtn = new javax.swing.JButton();
         statusLabel = new javax.swing.JLabel();
@@ -68,6 +69,15 @@ public abstract class DebugManager extends javax.swing.JFrame {
         counterLabel.setForeground(Color.RED);
         getContentPane().add(counterLabel);
         counterLabel.setBounds(90, 200, 150, 16);
+
+        freelancerBtn.setText("Freelancer");
+        freelancerBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                freelancerBtnActionPerformed(evt);
+            }
+        });
+        getContentPane().add(freelancerBtn);
+        freelancerBtn.setBounds(150, 130, 100, 20);
 
         artistBtn.setText("Artist");
         artistBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -126,6 +136,15 @@ public abstract class DebugManager extends javax.swing.JFrame {
         WindowManager.getLoginFrame().openMain();
     }//GEN-LAST:event_artistBtnActionPerformed
 
+    private void freelancerBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_freelancerBtnActionPerformed
+        if (WindowManager.getLoginFrame() == null)
+            return;
+        if (WindowManager.getMainFrame() != null)
+            WindowManager.closeMain();
+        WindowManager.getLoginFrame().extLogin("avi@gmail.com", "123");
+        WindowManager.getLoginFrame().openMain();
+    }//GEN-LAST:event_freelancerBtnActionPerformed
+
     public static void setDatabaseStatus(Boolean flag) {
         if (flag) {
             statusLabel.setText("connected");
@@ -156,9 +175,13 @@ public abstract class DebugManager extends javax.swing.JFrame {
     private static javax.swing.JButton artistBtn;
     private static javax.swing.JLabel counterLabel;
     private static javax.swing.JLabel databaseLabel;
+    private static javax.swing.JButton freelancerBtn;
     private static javax.swing.JLabel objectsCounterLabel;
     private static javax.swing.JLabel quickLog;
     private static javax.swing.JLabel statusLabel;
+    private static javax.swing.JButton userBtn;
+    private static javax.swing.JButton userBtn1;
+    private static javax.swing.JButton userBtn2;
     private static javax.swing.JLabel wallpaper;
     private static javax.swing.JLabel xmlLabel;
     private static javax.swing.JLabel xmlstatusLabel;
