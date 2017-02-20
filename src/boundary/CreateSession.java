@@ -38,18 +38,17 @@ public class CreateSession extends javax.swing.JPanel {
     CreateSessionControll csController;
     
     public CreateSession() {
+        if (WindowManager.getTmpArtist() == null)
+            return;
         initComponents();
-        if (WindowManager.getTmpArtist() != null) {
-            for (Map.Entry<String, ArrayList<java.util.Date>> entry : SessionsInTheRoom.getXML().getOccupied().entrySet()) {
-                String key = entry.getKey();
-                if (key.equals(WindowManager.getTmpArtist().getAlphaCode())) {
-                    ArrayList<java.util.Date> value = entry.getValue();
-                    jXDatePicker1.getMonthView().setUnselectableDates(value.toArray(new java.util.Date[value.size()]));
-                }
+        for (Map.Entry<String, ArrayList<java.util.Date>> entry : SessionsInTheRoom.getXML().getOccupied().entrySet()) {
+            String key = entry.getKey();
+            if (key.equals(WindowManager.getTmpArtist().getAlphaCode())) {
+                ArrayList<java.util.Date> value = entry.getValue();
+                jXDatePicker1.getMonthView().setUnselectableDates(value.toArray(new java.util.Date[value.size()]));
             }
         }
         csController = new CreateSessionControll();
-        
         java.util.Date d = new java.util.Date();
         d.setHours(0);
         d.setMinutes(0);
@@ -92,7 +91,6 @@ public class CreateSession extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTable3 = new javax.swing.JTable();
-        jLabel22 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
@@ -100,6 +98,7 @@ public class CreateSession extends javax.swing.JPanel {
         jLabel9 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
         jButton3 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -126,7 +125,7 @@ public class CreateSession extends javax.swing.JPanel {
         }
 
         add(jScrollPane2);
-        jScrollPane2.setBounds(50, 200, 660, 100);
+        jScrollPane2.setBounds(270, 190, 470, 140);
 
         jTable1.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
             public void propertyChange(java.beans.PropertyChangeEvent evt) {
@@ -141,7 +140,7 @@ public class CreateSession extends javax.swing.JPanel {
         }
 
         add(jScrollPane1);
-        jScrollPane1.setBounds(140, 120, 190, 70);
+        jScrollPane1.setBounds(40, 190, 200, 140);
 
         jPanel1.setOpaque(false);
         jPanel1.setLayout(null);
@@ -150,56 +149,58 @@ public class CreateSession extends javax.swing.JPanel {
         jScrollPane3.setViewportView(jTable3);
 
         jPanel1.add(jScrollPane3);
-        jScrollPane3.setBounds(20, 0, 630, 210);
-
-        jLabel22.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/subContainer1.png"))); // NOI18N
-        jPanel1.add(jLabel22);
-        jLabel22.setBounds(20, 0, 630, 220);
+        jScrollPane3.setBounds(0, 0, 700, 170);
 
         add(jPanel1);
-        jPanel1.setBounds(30, 350, 650, 210);
+        jPanel1.setBounds(40, 390, 700, 170);
 
         jLabel13.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel13.setText("Rooms:");
+        jLabel13.setText("Soundmans:");
         add(jLabel13);
-        jLabel13.setBounds(60, 120, 70, 20);
+        jLabel13.setBounds(270, 160, 110, 20);
 
         jLabel12.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(0, 0, 0));
         jLabel12.setText("Description:");
         add(jLabel12);
-        jLabel12.setBounds(450, 170, 320, 20);
+        jLabel12.setBounds(590, 160, 240, 20);
 
         jLabel11.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(0, 0, 0));
         jLabel11.setText("Phone number:");
         add(jLabel11);
-        jLabel11.setBounds(450, 150, 320, 20);
+        jLabel11.setBounds(590, 140, 240, 20);
 
         jLabel10.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(0, 0, 0));
         jLabel10.setText("Email:");
         add(jLabel10);
-        jLabel10.setBounds(450, 130, 320, 20);
+        jLabel10.setBounds(590, 120, 240, 20);
 
         jLabel9.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(0, 0, 0));
         jLabel9.setText("Address:");
         add(jLabel9);
-        jLabel9.setBounds(450, 110, 320, 20);
+        jLabel9.setBounds(590, 100, 240, 20);
 
         jLabel8.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(0, 0, 0));
         jLabel8.setText("Name:");
         add(jLabel8);
-        jLabel8.setBounds(450, 90, 320, 20);
+        jLabel8.setBounds(590, 80, 240, 20);
 
         jLabel7.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(0, 0, 0));
         jLabel7.setText("About studio:");
         add(jLabel7);
-        jLabel7.setBounds(350, 90, 83, 20);
+        jLabel7.setBounds(590, 60, 150, 20);
+
+        jLabel14.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        jLabel14.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel14.setText("Rooms:");
+        add(jLabel14);
+        jLabel14.setBounds(40, 160, 70, 20);
 
         jComboBox1.addItem("Select Studio");
         jComboBox1.addItemListener(new java.awt.event.ItemListener() {
@@ -213,11 +214,11 @@ public class CreateSession extends javax.swing.JPanel {
             }
         });
         add(jComboBox1);
-        jComboBox1.setBounds(190, 90, 140, 25);
+        jComboBox1.setBounds(440, 60, 120, 25);
 
         jButton3.setText("Create Session");
         add(jButton3);
-        jButton3.setBounds(320, 310, 140, 26);
+        jButton3.setBounds(340, 350, 140, 26);
 
         jButton2.setText("Invite Musicians");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -226,13 +227,13 @@ public class CreateSession extends javax.swing.JPanel {
             }
         });
         add(jButton2);
-        jButton2.setBounds(160, 310, 140, 26);
+        jButton2.setBounds(170, 350, 140, 26);
 
         jLabel4.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("Available Studio:");
         add(jLabel4);
-        jLabel4.setBounds(60, 90, 130, 20);
+        jLabel4.setBounds(320, 60, 130, 20);
 
         jXDatePicker1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -245,41 +246,42 @@ public class CreateSession extends javax.swing.JPanel {
             }
         });
         add(jXDatePicker1);
-        jXDatePicker1.setBounds(190, 60, 140, 26);
+        jXDatePicker1.setBounds(160, 60, 140, 26);
 
         jLabel6.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("End time:");
         add(jLabel6);
-        jLabel6.setBounds(530, 60, 80, 20);
+        jLabel6.setBounds(200, 110, 80, 20);
 
         jLabel5.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Start time:");
         add(jLabel5);
-        jLabel5.setBounds(370, 60, 80, 20);
+        jLabel5.setBounds(40, 110, 80, 20);
 
         jLabel3.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("Create New Session");
         add(jLabel3);
-        jLabel3.setBounds(60, 10, 230, 40);
+        jLabel3.setBounds(0, 10, 850, 40);
 
         jLabel2.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Session's date:");
         add(jLabel2);
-        jLabel2.setBounds(60, 60, 130, 20);
+        jLabel2.setBounds(40, 60, 130, 20);
 
         jSpinner3.setModel(new SpinnerDateModel());
         jSpinner3.setEditor(new JSpinner.DateEditor(jSpinner3, "HH:mm"));
         add(jSpinner3);
-        jSpinner3.setBounds(610, 60, 60, 24);
+        jSpinner3.setBounds(280, 110, 60, 24);
 
         jSpinner2.setModel(new SpinnerDateModel());
         jSpinner2.setEditor(new JSpinner.DateEditor(jSpinner2, "HH:mm"));
         add(jSpinner2);
-        jSpinner2.setBounds(450, 60, 60, 24);
+        jSpinner2.setBounds(120, 110, 60, 24);
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/container3.png"))); // NOI18N
         add(jLabel1);
@@ -451,7 +453,7 @@ public class CreateSession extends javax.swing.JPanel {
             }
         }
         jPanel1.setVisible(true);
-        jPanel1.setBounds(25, 350, 650, 210);
+        jPanel1.setBounds(40, 390, 700, 170);
         Date selectedDate = new Date(jXDatePicker1.getDate().getTime()); 
         Date selectedStart = new Date(((java.util.Date) jSpinner2.getValue()).getTime());
         Date selectedEnd = new Date(((java.util.Date) jSpinner3.getValue()).getTime());
@@ -502,8 +504,8 @@ public class CreateSession extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;

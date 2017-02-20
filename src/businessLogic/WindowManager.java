@@ -37,6 +37,7 @@ public abstract class WindowManager {
     public static void closeMain() {
         mainFrame.dispose();
         loginFrame = new MainLogin();
+        clean();
         SessionsInTheRoom.getDM().setVisible(false);
     }
     public static void setCurrentWindow(JPanel panel) {
@@ -185,12 +186,12 @@ public abstract class WindowManager {
         welcome.setFont(new java.awt.Font("Dialog", 0, 36));
         welcome.setForeground(new java.awt.Color(255, 255, 255));
         mainFrame.getContentPane().add(welcome, mainFrame.getContentPane().countComponents()-1);
-        welcome.setBounds(400, 30, 500, 50);
+        welcome.setBounds(208, 30, 580, 50);
         if (getTmpArtist() != null)
             welcome.setText("Welcome "+getTmpArtist().getStageName());
         else if (getTmpFreelancer() != null)
             welcome.setText("Welcome "+getTmpFreelancer().getFreelancerName());
-        else if (getTmpArtist() == null || getTmpFreelancer() == null)
+        else 
             welcome.setText("Welcome "+getAuthType());
     }
 }

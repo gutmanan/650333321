@@ -77,71 +77,72 @@ public class CreateStudio extends javax.swing.JPanel {
         jScrollPane1.setViewportView(descriptionTextArea);
 
         add(jScrollPane1);
-        jScrollPane1.setBounds(160, 210, 530, 140);
+        jScrollPane1.setBounds(530, 80, 280, 140);
 
         descriptionLabel.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         descriptionLabel.setForeground(new java.awt.Color(0, 0, 0));
         descriptionLabel.setText("Description:");
         add(descriptionLabel);
-        descriptionLabel.setBounds(60, 210, 130, 20);
+        descriptionLabel.setBounds(430, 90, 130, 20);
         add(jTextField5);
-        jTextField5.setBounds(540, 160, 150, 30);
+        jTextField5.setBounds(220, 320, 180, 30);
 
         housNumLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         housNumLabel.setForeground(new java.awt.Color(0, 0, 0));
         housNumLabel.setText("House Number :");
         add(housNumLabel);
-        housNumLabel.setBounds(430, 170, 100, 20);
+        housNumLabel.setBounds(90, 330, 100, 20);
 
         streetLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         streetLabel.setForeground(new java.awt.Color(0, 0, 0));
         streetLabel.setText("Street :");
         add(streetLabel);
-        streetLabel.setBounds(430, 130, 110, 20);
+        streetLabel.setBounds(90, 290, 110, 20);
         add(jTextField4);
-        jTextField4.setBounds(540, 120, 150, 30);
+        jTextField4.setBounds(220, 280, 180, 30);
 
         cityLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         cityLabel.setForeground(new java.awt.Color(0, 0, 0));
         cityLabel.setText("City :");
         add(cityLabel);
-        cityLabel.setBounds(430, 90, 90, 20);
+        cityLabel.setBounds(90, 250, 90, 20);
 
         add(jComboBox2);
-        jComboBox2.setBounds(540, 80, 150, 30);
+        jComboBox2.setBounds(220, 240, 180, 30);
         jComboBox2.removeAllItems();
         for (E_CITIES e : ListOfCity("Israel"))
         jComboBox2.addItem(e.toString());
         add(phoneField);
-        phoneField.setBounds(160, 160, 150, 30);
+        phoneField.setBounds(220, 180, 180, 30);
         add(emailField);
-        emailField.setBounds(160, 120, 150, 30);
+        emailField.setBounds(220, 140, 180, 30);
         add(studioNameField);
-        studioNameField.setBounds(160, 80, 150, 30);
+        studioNameField.setBounds(220, 80, 180, 30);
 
         studioNameLabel1.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         studioNameLabel1.setForeground(new java.awt.Color(0, 0, 0));
-        studioNameLabel1.setText("Phone:");
+        studioNameLabel1.setText("Phone Number:");
         add(studioNameLabel1);
-        studioNameLabel1.setBounds(60, 170, 130, 20);
+        studioNameLabel1.setBounds(90, 190, 130, 20);
 
         emailLabel.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         emailLabel.setForeground(new java.awt.Color(0, 0, 0));
         emailLabel.setText("Email:");
         add(emailLabel);
-        emailLabel.setBounds(60, 130, 130, 20);
+        emailLabel.setBounds(90, 150, 130, 20);
 
         studioNameLabel.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         studioNameLabel.setForeground(new java.awt.Color(0, 0, 0));
         studioNameLabel.setText("Studio  name:");
         add(studioNameLabel);
-        studioNameLabel.setBounds(60, 90, 130, 20);
+        studioNameLabel.setBounds(90, 90, 130, 20);
 
         titleLabel.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
         titleLabel.setForeground(new java.awt.Color(0, 0, 0));
+        titleLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         titleLabel.setText("Create New Studio");
         add(titleLabel);
-        titleLabel.setBounds(60, 10, 230, 40);
+        titleLabel.setBounds(0, 10, 850, 40);
 
         wallpaper.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/container3.png"))); // NOI18N
         add(wallpaper);
