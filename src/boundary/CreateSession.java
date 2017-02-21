@@ -6,7 +6,7 @@
 package boundary;
 
 import entity.Musician;
-import businessLogic.CreateSessionControll;
+import businessLogic.CreateSessionControl;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,7 +35,7 @@ import javax.swing.table.TableColumn;
  */
 public class CreateSession extends javax.swing.JPanel {
     
-    CreateSessionControll csController;
+    CreateSessionControl csController;
     
     public CreateSession() {
         if (WindowManager.getTmpArtist() == null)
@@ -48,7 +48,7 @@ public class CreateSession extends javax.swing.JPanel {
                 jXDatePicker1.getMonthView().setUnselectableDates(value.toArray(new java.util.Date[value.size()]));
             }
         }
-        csController = new CreateSessionControll();
+        csController = new CreateSessionControl();
         java.util.Date d = new java.util.Date();
         d.setHours(0);
         d.setMinutes(0);

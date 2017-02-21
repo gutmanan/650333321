@@ -57,7 +57,7 @@ public class MainGui extends JFrame {
         getContentPane().setLayout(null);
 
         if (WindowManager.getAuthValue() == 2)
-        genericButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/addRoomBtn.png"))); // NOI18N
+        genericButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/studioRatesBtn.png"))); // NOI18N
         genericButton3.setBorderPainted(false);
         genericButton3.setContentAreaFilled(false);
         genericButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -122,14 +122,13 @@ public class MainGui extends JFrame {
         exitButton.setBounds(1070, 610, 130, 40);
 
         if (WindowManager.getAuthValue() == 1)
-        genericButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/viewSessionBtn.png"))); // NOI18N
+        genericButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/addRecordingBtn.png"))); // NOI18N
         if (WindowManager.getAuthValue() == 2)
-        genericButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/viewStudioBtn.png"))); // NOI18N
+        genericButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/addRoomBtn.png"))); // NOI18N
         if (WindowManager.getAuthValue() == 3)
         genericButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/addStudioBtn.png"))); // NOI18N
         genericButton2.setBorderPainted(false);
         genericButton2.setContentAreaFilled(false);
-        genericButton2.setDisabledIcon(null);
         genericButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 genericButton2ActionPerformed(evt);
@@ -184,11 +183,11 @@ public class MainGui extends JFrame {
     }//GEN-LAST:event_arrowButtonActionPerformed
 
     private void genericButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_genericButton2ActionPerformed
-        
+        setWindows(null, new AddRoom(), null);              
     }//GEN-LAST:event_genericButton2ActionPerformed
 
     private void genericButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_genericButton3ActionPerformed
-        // TODO add your handling code here:
+        setWindows(null, new StudioRates(), null);
     }//GEN-LAST:event_genericButton3ActionPerformed
 
     private void setWindows(JPanel p1, JPanel p2, JPanel p3) {

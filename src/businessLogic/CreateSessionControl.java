@@ -22,7 +22,7 @@ import java.util.logging.Logger;
  *
  * @author Shai Gutman
  */
-public class CreateSessionControll {
+public class CreateSessionControl {
     
     public HashMap<Integer, ArrayList<Integer>> getAvailableStudioRooms(Date selectedDate, java.util.Date start, java.util.Date end) {
         ResultSet rs = SessionsInTheRoom.getDB().query("SELECT tblRoom.studioNumber, tblRoom.RoomNumber, tblRoom.RecordingCell\n" +
@@ -71,7 +71,7 @@ public class CreateSessionControll {
                 }
             }
         } catch (SQLException ex) {
-            Logger.getLogger(CreateSessionControll.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CreateSessionControl.class.getName()).log(Level.SEVERE, null, ex);
         }
         return availableStudioRooms;
     }
@@ -86,7 +86,7 @@ public class CreateSessionControll {
                 tmp = new Room(rs.getInt(2), rs.getInt(1), rs.getBoolean(3));
             }
         } catch (SQLException ex) {
-            Logger.getLogger(CreateSessionControll.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CreateSessionControl.class.getName()).log(Level.SEVERE, null, ex);
         }
         return tmp;
     }
@@ -114,7 +114,7 @@ public class CreateSessionControll {
                 }
             }
         } catch (SQLException ex) {
-            Logger.getLogger(CreateSessionControll.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CreateSessionControl.class.getName()).log(Level.SEVERE, null, ex);
         }
         return availableSoundmans;
     }
@@ -141,7 +141,7 @@ public class CreateSessionControll {
                 }
             }
         } catch (SQLException ex) {
-            Logger.getLogger(CreateSessionControll.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CreateSessionControl.class.getName()).log(Level.SEVERE, null, ex);
         }
          return availableMusicition;
      }

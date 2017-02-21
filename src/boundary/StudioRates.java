@@ -7,7 +7,6 @@ package boundary;
 
 import entity.Musician;
 import businessLogic.CreateSessionControl;
-import businessLogic.CreateStudioControl;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,7 +16,6 @@ import entity.SoundMan;
 import businessLogic.SessionsInTheRoom;
 import businessLogic.WindowManager;
 import entity.E_CITIES;
-import entity.Studio;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collections;
@@ -38,11 +36,10 @@ import javax.swing.table.TableColumn;
  *
  * @author Shai Gutman
  */
-public class CreateStudio extends javax.swing.JPanel {
+public class StudioRates extends javax.swing.JPanel {
         
-    public CreateStudio() {
+    public StudioRates() {
         initComponents();
-        setTable();
     }
 
     /**
@@ -56,16 +53,13 @@ public class CreateStudio extends javax.swing.JPanel {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         descriptionTextArea = new javax.swing.JTextArea();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
         descriptionLabel = new javax.swing.JLabel();
-        houseTextField = new javax.swing.JTextField();
+        jTextField5 = new javax.swing.JTextField();
         housNumLabel = new javax.swing.JLabel();
         streetLabel = new javax.swing.JLabel();
-        streetTextField = new javax.swing.JTextField();
+        jTextField4 = new javax.swing.JTextField();
         cityLabel = new javax.swing.JLabel();
-        housNumLabel1 = new javax.swing.JLabel();
-        cityComboBox = new javax.swing.JComboBox<>();
+        jComboBox2 = new javax.swing.JComboBox<>();
         phoneField = new javax.swing.JTextField();
         emailField = new javax.swing.JTextField();
         studioNameField = new javax.swing.JTextField();
@@ -86,88 +80,72 @@ public class CreateStudio extends javax.swing.JPanel {
         add(jScrollPane1);
         jScrollPane1.setBounds(530, 80, 280, 140);
 
-        jScrollPane2.setViewportView(jTable1);
-
-        add(jScrollPane2);
-        jScrollPane2.setBounds(60, 390, 650, 170);
-
         descriptionLabel.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         descriptionLabel.setForeground(new java.awt.Color(0, 0, 0));
         descriptionLabel.setText("Description:");
         add(descriptionLabel);
         descriptionLabel.setBounds(430, 90, 130, 20);
-        add(houseTextField);
-        houseTextField.setBounds(190, 320, 180, 30);
+        add(jTextField5);
+        jTextField5.setBounds(220, 320, 180, 30);
 
         housNumLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         housNumLabel.setForeground(new java.awt.Color(0, 0, 0));
         housNumLabel.setText("House Number :");
         add(housNumLabel);
-        housNumLabel.setBounds(60, 330, 100, 20);
+        housNumLabel.setBounds(90, 330, 100, 20);
 
         streetLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         streetLabel.setForeground(new java.awt.Color(0, 0, 0));
         streetLabel.setText("Street :");
         add(streetLabel);
-        streetLabel.setBounds(60, 290, 110, 20);
-        add(streetTextField);
-        streetTextField.setBounds(190, 280, 180, 30);
+        streetLabel.setBounds(90, 290, 110, 20);
+        add(jTextField4);
+        jTextField4.setBounds(220, 280, 180, 30);
 
         cityLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         cityLabel.setForeground(new java.awt.Color(0, 0, 0));
         cityLabel.setText("City :");
         add(cityLabel);
-        cityLabel.setBounds(60, 250, 90, 20);
+        cityLabel.setBounds(90, 250, 90, 20);
 
-        housNumLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        housNumLabel1.setForeground(new java.awt.Color(0, 0, 0));
-        housNumLabel1.setText("Existed studios :");
-        add(housNumLabel1);
-        housNumLabel1.setBounds(60, 370, 130, 20);
-
-        add(cityComboBox);
-        cityComboBox.setBounds(190, 240, 180, 30);
-        cityComboBox.removeAllItems();
+        add(jComboBox2);
+        jComboBox2.setBounds(220, 240, 180, 30);
+        jComboBox2.removeAllItems();
         for (E_CITIES e : ListOfCity("Israel"))
-        cityComboBox.addItem(e.toString());
+        jComboBox2.addItem(e.toString());
         add(phoneField);
-        phoneField.setBounds(190, 180, 180, 30);
+        phoneField.setBounds(220, 180, 180, 30);
         add(emailField);
-        emailField.setBounds(190, 140, 180, 30);
+        emailField.setBounds(220, 140, 180, 30);
         add(studioNameField);
-        studioNameField.setBounds(190, 80, 180, 30);
+        studioNameField.setBounds(220, 80, 180, 30);
 
-        createButton.setText("Create Studio");
-        createButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                createButtonActionPerformed(evt);
-            }
-        });
+        createButton.setText("Create Room");
         add(createButton);
-        createButton.setBounds(540, 320, 140, 30);
+        createButton.setBounds(510, 380, 140, 26);
 
         studioNameLabel1.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         studioNameLabel1.setForeground(new java.awt.Color(0, 0, 0));
         studioNameLabel1.setText("Phone Number:");
         add(studioNameLabel1);
-        studioNameLabel1.setBounds(60, 190, 130, 20);
+        studioNameLabel1.setBounds(90, 190, 130, 20);
 
         emailLabel.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         emailLabel.setForeground(new java.awt.Color(0, 0, 0));
         emailLabel.setText("Email:");
         add(emailLabel);
-        emailLabel.setBounds(60, 150, 130, 20);
+        emailLabel.setBounds(90, 150, 130, 20);
 
         studioNameLabel.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         studioNameLabel.setForeground(new java.awt.Color(0, 0, 0));
-        studioNameLabel.setText("Studio name:");
+        studioNameLabel.setText("Studio  name:");
         add(studioNameLabel);
-        studioNameLabel.setBounds(60, 90, 130, 20);
+        studioNameLabel.setBounds(90, 90, 130, 20);
 
         titleLabel.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
         titleLabel.setForeground(new java.awt.Color(0, 0, 0));
         titleLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        titleLabel.setText("Create New Studio");
+        titleLabel.setText("View Studio");
         add(titleLabel);
         titleLabel.setBounds(0, 10, 850, 40);
 
@@ -175,22 +153,6 @@ public class CreateStudio extends javax.swing.JPanel {
         add(wallpaper);
         wallpaper.setBounds(0, 0, 850, 580);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void createButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createButtonActionPerformed
-        String studioName = studioNameField.getText();
-        String description = descriptionTextArea.getText();
-        String email = emailField.getText();
-        String phone = phoneField.getText();
-        String address = streetTextField.getText()+" "+houseTextField.getText()+", "+String.valueOf(cityComboBox.getSelectedItem());
-        if (CreateStudioControl.insertNewStudio(studioName, description, email, phone, address)) {
-            JOptionPane.showMessageDialog(this,
-                "The studio was created successfully!",
-                "Studio was created",
-                JOptionPane.INFORMATION_MESSAGE);
-            WindowManager.openWin(new CreateStudio());
-            return;
-        }
-    }//GEN-LAST:event_createButtonActionPerformed
 
 public List<E_CITIES> ListOfCity(String country){
     List<E_CITIES> cityList = new ArrayList<E_CITIES>();
@@ -202,30 +164,8 @@ public List<E_CITIES> ListOfCity(String country){
     Collections.sort(cityList);
     return cityList;
 }
-
-public void setTable(){
-    DefaultTableModel model = new DefaultTableModel() {
-        @Override
-            public boolean isCellEditable(int row, int col) {
-                 switch (col) {
-                     case 2:
-                         return true;
-                     default:
-                         return false;
-                  }
-            }
-    }; 
-    jTable1.setModel(model);
-    model.addColumn("No."); 
-    model.addColumn("Name"); 
-    model.addColumn("Addrees");
-    model.setRowCount(0);
-    for (Studio s : CreateStudioControl.getStudios()) {
-        model.addRow(new Object[]{s.getStudioID(),s.getStudioName(), s.getAddress()});
-    }
-}
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> cityComboBox;
     private javax.swing.JLabel cityLabel;
     private javax.swing.JButton createButton;
     private javax.swing.JLabel descriptionLabel;
@@ -233,14 +173,12 @@ public void setTable(){
     private javax.swing.JTextField emailField;
     private javax.swing.JLabel emailLabel;
     private javax.swing.JLabel housNumLabel;
-    private javax.swing.JLabel housNumLabel1;
-    private javax.swing.JTextField houseTextField;
+    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTextField jTextField4;
+    private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField phoneField;
     private javax.swing.JLabel streetLabel;
-    private javax.swing.JTextField streetTextField;
     private javax.swing.JTextField studioNameField;
     private javax.swing.JLabel studioNameLabel;
     private javax.swing.JLabel studioNameLabel1;
