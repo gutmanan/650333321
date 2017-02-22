@@ -214,7 +214,7 @@ public class CreateSession extends javax.swing.JPanel {
             }
         });
         add(jComboBox1);
-        jComboBox1.setBounds(440, 60, 120, 25);
+        jComboBox1.setBounds(160, 120, 120, 25);
 
         jButton3.setText("Create Session");
         add(jButton3);
@@ -233,7 +233,7 @@ public class CreateSession extends javax.swing.JPanel {
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("Available Studio:");
         add(jLabel4);
-        jLabel4.setBounds(320, 60, 130, 20);
+        jLabel4.setBounds(40, 120, 130, 20);
 
         jXDatePicker1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -246,19 +246,19 @@ public class CreateSession extends javax.swing.JPanel {
             }
         });
         add(jXDatePicker1);
-        jXDatePicker1.setBounds(160, 60, 140, 26);
+        jXDatePicker1.setBounds(160, 60, 120, 26);
 
         jLabel6.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel6.setText("End time:");
+        jLabel6.setText("Until:");
         add(jLabel6);
-        jLabel6.setBounds(200, 110, 80, 20);
+        jLabel6.setBounds(460, 60, 60, 20);
 
         jLabel5.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Start time:");
         add(jLabel5);
-        jLabel5.setBounds(40, 110, 80, 20);
+        jLabel5.setBounds(300, 60, 80, 20);
 
         jLabel3.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
@@ -276,12 +276,12 @@ public class CreateSession extends javax.swing.JPanel {
         jSpinner3.setModel(new SpinnerDateModel());
         jSpinner3.setEditor(new JSpinner.DateEditor(jSpinner3, "HH:mm"));
         add(jSpinner3);
-        jSpinner3.setBounds(280, 110, 60, 24);
+        jSpinner3.setBounds(500, 60, 60, 24);
 
         jSpinner2.setModel(new SpinnerDateModel());
         jSpinner2.setEditor(new JSpinner.DateEditor(jSpinner2, "HH:mm"));
         add(jSpinner2);
-        jSpinner2.setBounds(120, 110, 60, 24);
+        jSpinner2.setBounds(380, 60, 60, 24);
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/container3.png"))); // NOI18N
         add(jLabel1);

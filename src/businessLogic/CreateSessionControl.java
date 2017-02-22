@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 public class CreateSessionControl {
     
     public HashMap<Integer, ArrayList<Integer>> getAvailableStudioRooms(Date selectedDate, java.util.Date start, java.util.Date end) {
-        ResultSet rs = SessionsInTheRoom.getDB().query("SELECT tblRoom.studioNumber, tblRoom.RoomNumber, tblRoom.RecordingCell\n" +
+        ResultSet rs = SessionsInTheRoom.getDB().query("SELECT tblRoom.*\n" +
                                                        "FROM tblRoom;");
         ResultSet rs3 = SessionsInTheRoom.getDB().query("SELECT tblSessionLocation.StudioNumber, tblSessionLocation.roomNumber, tblSession.SessionDate, tblSession.startTime, tblSession.endTime, tblSessionLocation.SessionNumber\n" +
                                                 "FROM [tblSession] INNER JOIN tblSessionLocation ON tblSession.SessionNumber = tblSessionLocation.SessionNumber\n" +
@@ -38,7 +38,7 @@ public class CreateSessionControl {
                 sessions.add(new Session(rs3.getInt(1),rs3.getInt(2), rs3.getInt(6),rs3.getDate(3), rs3.getTime(4), rs3.getTime(5)));
             }
             while (rs.next()) {
-                rooms.add(new Room(rs.getInt(2), rs.getInt(1), rs.getBoolean(3)));
+                rooms.add(new Room(rs.getInt(1), rs.getInt(2), rs.getBoolean(3), rs.getInt(4), rs.getInt(5)));
             }
             for (Room r : rooms) {
                 if (!availableStudioRooms.containsKey(r.getStudioID())) {
@@ -77,13 +77,13 @@ public class CreateSessionControl {
     }
     
     public Room getRoom(int studioID, int roomID) {
-        ResultSet rs = SessionsInTheRoom.getDB().query("SELECT tblRoom.studioNumber, tblRoom.RoomNumber, tblRoom.RecordingCell\n" +
+        ResultSet rs = SessionsInTheRoom.getDB().query("SELECT tblRoom.*\n" +
                                                 "FROM tblRoom\n" +
                                                 "WHERE (((tblRoom.studioNumber)="+studioID+") AND ((tblRoom.RoomNumber)="+roomID+"));");
         Room tmp = null;
         try {
             while (rs.next()) {
-                tmp = new Room(rs.getInt(2), rs.getInt(1), rs.getBoolean(3));
+                tmp = new Room(rs.getInt(1), rs.getInt(2), rs.getBoolean(3), rs.getInt(4), rs.getInt(5));
             }
         } catch (SQLException ex) {
             Logger.getLogger(CreateSessionControl.class.getName()).log(Level.SEVERE, null, ex);

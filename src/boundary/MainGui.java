@@ -78,7 +78,7 @@ public class MainGui extends JFrame {
             }
         });
         getContentPane().add(arrowButton);
-        arrowButton.setBounds(70, 610, 80, 65);
+        arrowButton.setBounds(95, 610, 80, 65);
 
         if (WindowManager.getAuthValue() == 1)
         userButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/artistBtn.png"))); // NOI18N
@@ -162,7 +162,7 @@ public class MainGui extends JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void genericButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_genericButton1ActionPerformed
-        setWindows(new CreateSession(), new CreateStudio(), null);
+        setWindows(new CreateSession(), new CreateStudio(), new AddQualification());
     }//GEN-LAST:event_genericButton1ActionPerformed
 
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
@@ -183,7 +183,7 @@ public class MainGui extends JFrame {
     }//GEN-LAST:event_arrowButtonActionPerformed
 
     private void genericButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_genericButton2ActionPerformed
-        setWindows(null, new AddRoom(), null);              
+        setWindows(null, new AddRoom(), new AddWorkWithStudio());              
     }//GEN-LAST:event_genericButton2ActionPerformed
 
     private void genericButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_genericButton3ActionPerformed

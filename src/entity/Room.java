@@ -9,10 +9,12 @@ public class Room {
     private int Capacity;
     private boolean RecordingCell;
 
-    public Room(int RoomNum, int StudioID, boolean RecordingCell) {
+    public Room(int RoomNum, int StudioID, boolean RecordingCell, int capacity, int price) {
         this.RoomNum = RoomNum;
         this.StudioID = StudioID;
         this.RecordingCell = RecordingCell;
+        this.Capacity = capacity;
+        this.Price = price;
     }
 
     public int getRoomNum() {

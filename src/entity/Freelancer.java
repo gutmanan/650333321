@@ -7,6 +7,8 @@ public class Freelancer {
     
     private String FreelancerID;
     private String FreelancerName;
+    private String first;
+    private String last;
     private Date BirthDate;
     private String Email;
     private String StageName;
@@ -19,9 +21,24 @@ public class Freelancer {
         this.Email = Email;
         this.StageName = StageName;
         this.password = password;
+        this.first = firstName;
+        this.last = lastName;
     }
 
     public String getFreelancerName() {
         return FreelancerName;
     }
+
+    public String getFreelancerID() {
+        return FreelancerID;
+    }
+
+    public String getFirst() {
+        return first;
+    }
+
+    public String getLast() {
+        return last;
+    }
+    
 }

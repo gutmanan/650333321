@@ -125,11 +125,11 @@ public class CreateStudio extends javax.swing.JPanel {
         add(housNumLabel1);
         housNumLabel1.setBounds(60, 370, 130, 20);
 
-        add(cityComboBox);
-        cityComboBox.setBounds(190, 240, 180, 30);
-        cityComboBox.removeAllItems();
+        cityComboBox.addItem("Select City");
         for (E_CITIES e : ListOfCity("Israel"))
         cityComboBox.addItem(e.toString());
+        add(cityComboBox);
+        cityComboBox.setBounds(190, 240, 180, 30);
         add(phoneField);
         phoneField.setBounds(190, 180, 180, 30);
         add(emailField);
@@ -144,7 +144,7 @@ public class CreateStudio extends javax.swing.JPanel {
             }
         });
         add(createButton);
-        createButton.setBounds(540, 320, 140, 30);
+        createButton.setBounds(530, 320, 140, 30);
 
         studioNameLabel1.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         studioNameLabel1.setForeground(new java.awt.Color(0, 0, 0));

@@ -42,6 +42,9 @@ public class Studio {
     public String getAddress() {
         return Address;
     }
-    
-    
+
+    @Override
+    public String toString() {
+        return String.valueOf(StudioID);
+    }
 }

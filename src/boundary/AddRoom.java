@@ -5,8 +5,10 @@
  */
 package boundary;
 
+import businessLogic.AddRoomControl;
 import entity.Musician;
 import businessLogic.CreateSessionControl;
+import businessLogic.CreateStudioControl;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,6 +18,7 @@ import entity.SoundMan;
 import businessLogic.SessionsInTheRoom;
 import businessLogic.WindowManager;
 import entity.E_CITIES;
+import entity.Studio;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collections;
@@ -23,6 +26,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultCellEditor;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
@@ -54,13 +58,31 @@ public class AddRoom extends javax.swing.JPanel {
         recCheckBox = new javax.swing.JCheckBox();
         priceLabel = new javax.swing.JLabel();
         roomNumberLabel = new javax.swing.JLabel();
-        roomField = new javax.swing.JTextField();
         priceField = new javax.swing.JTextField();
         studioComboBox = new javax.swing.JComboBox<>();
         capacityField = new javax.swing.JTextField();
         createButton = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTable1 = new javax.swing.JTable() {
+            @Override
+            public Class getColumnClass(int column) {
+                switch (column) {
+                    case 0:
+                    return String.class;
+                    case 1:
+                    return Boolean.class;
+                    default:
+                    return String.class;
+                }
+            }
+        };
+        jLabel9 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        roomCountLabel = new javax.swing.JLabel();
         existedRoomsLabel = new javax.swing.JLabel();
         capacityLabel = new javax.swing.JLabel();
         emailLabel = new javax.swing.JLabel();
@@ -71,38 +93,88 @@ public class AddRoom extends javax.swing.JPanel {
         setOpaque(false);
         setLayout(null);
         add(recCheckBox);
-        recCheckBox.setBounds(190, 170, 30, 30);
+        recCheckBox.setBounds(190, 190, 110, 30);
 
         priceLabel.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         priceLabel.setForeground(new java.awt.Color(0, 0, 0));
         priceLabel.setText("Price per hour:");
         add(priceLabel);
-        priceLabel.setBounds(60, 260, 130, 20);
+        priceLabel.setBounds(60, 280, 130, 20);
 
         roomNumberLabel.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         roomNumberLabel.setForeground(new java.awt.Color(0, 0, 0));
         roomNumberLabel.setText("Room number:");
         add(roomNumberLabel);
-        roomNumberLabel.setBounds(60, 140, 130, 20);
-        add(roomField);
-        roomField.setBounds(190, 130, 180, 30);
+        roomNumberLabel.setBounds(60, 160, 120, 20);
         add(priceField);
-        priceField.setBounds(190, 250, 180, 30);
+        priceField.setBounds(190, 270, 180, 30);
 
-        studioComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        studioComboBox.addItem("Select Studio");
+        for (Studio s : CreateStudioControl.getStudios())
+        studioComboBox.addItem(s.toString());
+        studioComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                studioComboBoxActionPerformed(evt);
+            }
+        });
         add(studioComboBox);
         studioComboBox.setBounds(190, 80, 180, 30);
         add(capacityField);
-        capacityField.setBounds(190, 210, 180, 30);
+        capacityField.setBounds(190, 230, 180, 30);
 
         createButton.setText("Create Room");
+        createButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                createButtonActionPerformed(evt);
+            }
+        });
         add(createButton);
-        createButton.setBounds(520, 260, 140, 26);
+        createButton.setBounds(110, 330, 140, 26);
 
         jScrollPane2.setViewportView(jTable1);
 
         add(jScrollPane2);
         jScrollPane2.setBounds(60, 390, 650, 170);
+
+        jLabel9.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel9.setText("Address:");
+        add(jLabel9);
+        jLabel9.setBounds(470, 130, 340, 20);
+
+        jLabel8.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel8.setText("Name:");
+        add(jLabel8);
+        jLabel8.setBounds(470, 110, 340, 20);
+
+        jLabel7.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel7.setText("About studio:");
+        add(jLabel7);
+        jLabel7.setBounds(470, 90, 150, 20);
+
+        jLabel10.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel10.setText("Email:");
+        add(jLabel10);
+        jLabel10.setBounds(470, 150, 340, 20);
+
+        jLabel11.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel11.setText("Phone number:");
+        add(jLabel11);
+        jLabel11.setBounds(470, 170, 340, 20);
+
+        jLabel12.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel12.setText("Description:");
+        add(jLabel12);
+        jLabel12.setBounds(470, 190, 340, 20);
+
+        roomCountLabel.setForeground(new java.awt.Color(0, 0, 0));
+        add(roomCountLabel);
+        roomCountLabel.setBounds(190, 160, 90, 20);
 
         existedRoomsLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         existedRoomsLabel.setForeground(new java.awt.Color(0, 0, 0));
@@ -114,13 +186,13 @@ public class AddRoom extends javax.swing.JPanel {
         capacityLabel.setForeground(new java.awt.Color(0, 0, 0));
         capacityLabel.setText("Capacity:");
         add(capacityLabel);
-        capacityLabel.setBounds(60, 220, 130, 20);
+        capacityLabel.setBounds(60, 240, 130, 20);
 
         emailLabel.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         emailLabel.setForeground(new java.awt.Color(0, 0, 0));
         emailLabel.setText("Recording cell:");
         add(emailLabel);
-        emailLabel.setBounds(60, 180, 130, 20);
+        emailLabel.setBounds(60, 195, 130, 20);
 
         studioNameLabel.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         studioNameLabel.setForeground(new java.awt.Color(0, 0, 0));
@@ -140,6 +212,43 @@ public class AddRoom extends javax.swing.JPanel {
         wallpaper.setBounds(0, 0, 850, 580);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void studioComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_studioComboBoxActionPerformed
+        if (studioComboBox.getSelectedItem() == null || studioComboBox.getSelectedIndex() == 0) {
+            return;
+        }
+        Studio tmpStudio = null;
+        for (Studio s : CreateStudioControl.getStudios()) {
+            if (String.valueOf(s.getStudioID()).equals(String.valueOf(studioComboBox.getSelectedItem()))) {
+                tmpStudio = s;
+            }
+        }
+        jLabel8.setText(jLabel8.getText()+" "+tmpStudio.getStudioName());
+        jLabel9.setText(jLabel9.getText()+" "+tmpStudio.getAddress());
+        jLabel10.setText(jLabel10.getText()+" "+tmpStudio.getEmail());
+        jLabel11.setText(jLabel11.getText()+" "+tmpStudio.getPhoneNum());
+        jLabel12.setText(jLabel12.getText()+" "+tmpStudio.getDescription());
+        setTable(tmpStudio.getStudioID());
+        int nextRoomID = AddRoomControl.getStudioRooms(tmpStudio.getStudioID()).size();
+        roomCountLabel.setText(String.valueOf(++nextRoomID));
+    }//GEN-LAST:event_studioComboBoxActionPerformed
+
+    private void createButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createButtonActionPerformed
+        int roomID = Integer.valueOf(roomCountLabel.getText());
+        String studioID = String.valueOf(studioComboBox.getSelectedItem());
+        boolean recCell = recCheckBox.isSelected();
+        int capacity = Integer.valueOf(capacityField.getText());
+        int price = Integer.valueOf(priceField.getText());
+        if (AddRoomControl.insertNewRoom(roomID, Integer.valueOf(studioID), 
+                                                recCell, capacity, price)) {
+            JOptionPane.showMessageDialog(this,
+                "The room was added successfully!",
+                "Room was added",
+                JOptionPane.INFORMATION_MESSAGE);
+            WindowManager.openWin(new AddRoom());
+            return;
+        }
+    }//GEN-LAST:event_createButtonActionPerformed
+
 public List<E_CITIES> ListOfCity(String country){
     List<E_CITIES> cityList = new ArrayList<E_CITIES>();
 
@@ -150,19 +259,44 @@ public List<E_CITIES> ListOfCity(String country){
     Collections.sort(cityList);
     return cityList;
 }
-    
+public void setTable(int selectedStudio){
+    DefaultTableModel model = new DefaultTableModel() {
+        @Override
+            public boolean isCellEditable(int row, int col) {
+                 switch (col) {
+                     default:
+                         return false;
+                  }
+            }
+    }; 
+    jTable1.setModel(model);
+    model.addColumn("No."); 
+    model.addColumn("Rec. Cell"); 
+    model.addColumn("Capacity");
+    model.addColumn("Price");
+    model.setRowCount(0);
+    for (Room r : AddRoomControl.getStudioRooms(selectedStudio)) {
+        model.addRow(new Object[]{r.getRoomNum(),r.isRecordingCell(), r.getCapacity(), r.getPrice()});
+    }
+}
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField capacityField;
     private javax.swing.JLabel capacityLabel;
     private javax.swing.JButton createButton;
     private javax.swing.JLabel emailLabel;
     private javax.swing.JLabel existedRoomsLabel;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField priceField;
     private javax.swing.JLabel priceLabel;
     private javax.swing.JCheckBox recCheckBox;
-    private javax.swing.JTextField roomField;
+    private javax.swing.JLabel roomCountLabel;
     private javax.swing.JLabel roomNumberLabel;
     private javax.swing.JComboBox<String> studioComboBox;
     private javax.swing.JLabel studioNameLabel;
