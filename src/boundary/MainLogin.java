@@ -355,7 +355,7 @@ public class MainLogin extends javax.swing.JFrame {
         Timestamp ts = new Timestamp(birthdate.getTime());
         String qry = "INSERT INTO tblFreelancer (FreelancerID, firstName, lastName, birthDate, eMail, stageName, Photo, password)"
         + "VALUES('"+username+"','"+firstname+"','"+lastname+"','"+ts+"',\""+email+"\",'"+nickname+"',\""+profileLabel.getIcon()+"\",'"+password+"')";
-        if (DBManager.insert(qry) > -1) {
+        if (DBManager.insert(qry) == -2) {
             JOptionPane.showMessageDialog(newAccountFrame,
                 "Congratulations your account was created successfully!",
                 "Account was created",

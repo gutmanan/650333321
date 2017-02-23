@@ -236,14 +236,7 @@ public class AddRoom extends javax.swing.JPanel {
         int roomID = Integer.valueOf(roomCountLabel.getText());
         String studioID = String.valueOf(studioComboBox.getSelectedItem());
         boolean recCell = recCheckBox.isSelected();
-        int capacity = Integer.valueOf(capacityField.getText());
-        int price = Integer.valueOf(priceField.getText());
-        if (AddRoomControl.insertNewRoom(roomID, Integer.valueOf(studioID), 
-                                                recCell, capacity, price)) {
-            JOptionPane.showMessageDialog(this,
-                "The room was added successfully!",
-                "Room was added",
-                JOptionPane.INFORMATION_MESSAGE);
+        if (AddRoomControl.insertNewRoom(roomID, Integer.valueOf(studioID), recCell, capacityField.getText(), priceField.getText())) {
             WindowManager.openWin(new AddRoom());
             return;
         }

@@ -14,9 +14,14 @@ import java.util.Map;
 import entity.Room;
 import entity.SoundMan;
 import businessLogic.SessionsInTheRoom;
+import businessLogic.StudioRatesControl;
 import businessLogic.WindowManager;
+import entity.RatingBarCell;
+import java.awt.Font;
+import java.awt.font.TextAttribute;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultCellEditor;
@@ -28,15 +33,14 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import org.jdesktop.swingx.JXDatePicker;
 
 /**
  *
  * @author Shai Gutman
  */
 public class CreateSession extends javax.swing.JPanel {
-    
-    CreateSessionControl csController;
-    
+        
     public CreateSession() {
         if (WindowManager.getTmpArtist() == null)
             return;
@@ -45,16 +49,9 @@ public class CreateSession extends javax.swing.JPanel {
             String key = entry.getKey();
             if (key.equals(WindowManager.getTmpArtist().getAlphaCode())) {
                 ArrayList<java.util.Date> value = entry.getValue();
-                jXDatePicker1.getMonthView().setUnselectableDates(value.toArray(new java.util.Date[value.size()]));
+                sessionDatePicker.getMonthView().setUnselectableDates(value.toArray(new java.util.Date[value.size()]));
             }
         }
-        csController = new CreateSessionControl();
-        java.util.Date d = new java.util.Date();
-        d.setHours(0);
-        d.setMinutes(0);
-        d.setSeconds(0);
-        jSpinner2.setValue(d);
-        jSpinner3.setValue(d);
     }
 
     /**
@@ -67,9 +64,9 @@ public class CreateSession extends javax.swing.JPanel {
     private void initComponents() {
 
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        soundmansTable = new javax.swing.JTable();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable() {
+        roomsTable = new javax.swing.JTable() {
             @Override
             public Class getColumnClass(int column) {
                 switch (column) {
@@ -91,52 +88,58 @@ public class CreateSession extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTable3 = new javax.swing.JTable();
-        jLabel13 = new javax.swing.JLabel();
+        endTextField = new javax.swing.JTextField();
+        soundmansLabel = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jButton3 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
-        jXDatePicker1 = new org.jdesktop.swingx.JXDatePicker();
+        roomsLabel = new javax.swing.JLabel();
+        clickLabel = new javax.swing.JLabel();
+        foravailLabel = new javax.swing.JLabel();
+        studioComboBox = new javax.swing.JComboBox<>();
+        createButton = new javax.swing.JButton();
+        inviteButton = new javax.swing.JButton();
+        startTextField = new javax.swing.JTextField();
+        availstudiosLabel = new javax.swing.JLabel();
+        sessionDatePicker = new org.jdesktop.swingx.JXDatePicker();
         jLabel6 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jSpinner3 = new javax.swing.JSpinner();
-        jSpinner2 = new javax.swing.JSpinner();
-        jLabel1 = new javax.swing.JLabel();
+        wallpaper = new javax.swing.JLabel();
 
         setOpaque(false);
         setLayout(null);
 
-        jScrollPane2.setViewportView(jTable2);
-        if (jTable2.getColumnModel().getColumnCount() > 0) {
-            jTable2.getColumnModel().getColumn(0).setResizable(false);
-            jTable2.getColumnModel().getColumn(0).setPreferredWidth(140);
-            jTable2.getColumnModel().getColumn(1).setResizable(false);
-            jTable2.getColumnModel().getColumn(2).setResizable(false);
-            jTable2.getColumnModel().getColumn(3).setResizable(false);
+        jScrollPane2.setVisible(false);
+
+        jScrollPane2.setViewportView(soundmansTable);
+        if (soundmansTable.getColumnModel().getColumnCount() > 0) {
+            soundmansTable.getColumnModel().getColumn(0).setResizable(false);
+            soundmansTable.getColumnModel().getColumn(0).setPreferredWidth(140);
+            soundmansTable.getColumnModel().getColumn(1).setResizable(false);
+            soundmansTable.getColumnModel().getColumn(2).setResizable(false);
+            soundmansTable.getColumnModel().getColumn(3).setResizable(false);
         }
 
         add(jScrollPane2);
         jScrollPane2.setBounds(270, 190, 470, 140);
 
-        jTable1.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+        jScrollPane1.setVisible(false);
+
+        roomsTable.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
             public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                jTable1PropertyChange(evt);
+                roomsTablePropertyChange(evt);
             }
         });
-        jScrollPane1.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setResizable(false);
-            jTable1.getColumnModel().getColumn(1).setResizable(false);
-            jTable1.getColumnModel().getColumn(2).setResizable(false);
+        jScrollPane1.setViewportView(roomsTable);
+        if (roomsTable.getColumnModel().getColumnCount() > 0) {
+            roomsTable.getColumnModel().getColumn(0).setResizable(false);
+            roomsTable.getColumnModel().getColumn(1).setResizable(false);
+            roomsTable.getColumnModel().getColumn(2).setResizable(false);
         }
 
         add(jScrollPane1);
@@ -153,12 +156,15 @@ public class CreateSession extends javax.swing.JPanel {
 
         add(jPanel1);
         jPanel1.setBounds(40, 390, 700, 170);
+        add(endTextField);
+        endTextField.setBounds(490, 60, 60, 26);
 
-        jLabel13.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        jLabel13.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel13.setText("Soundmans:");
-        add(jLabel13);
-        jLabel13.setBounds(270, 160, 110, 20);
+        soundmansLabel.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        soundmansLabel.setForeground(new java.awt.Color(0, 0, 0));
+        soundmansLabel.setText("Soundmans:");
+        soundmansLabel.setVisible(false);
+        add(soundmansLabel);
+        soundmansLabel.setBounds(270, 160, 110, 20);
 
         jLabel12.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(0, 0, 0));
@@ -190,80 +196,118 @@ public class CreateSession extends javax.swing.JPanel {
         add(jLabel8);
         jLabel8.setBounds(590, 80, 240, 20);
 
+        jLabel7.setVisible(false);
+        jLabel8.setVisible(false);
+        jLabel9.setVisible(false);
+        jLabel10.setVisible(false);
+        jLabel11.setVisible(false);
+        jLabel12.setVisible(false);
         jLabel7.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(0, 0, 0));
         jLabel7.setText("About studio:");
         add(jLabel7);
         jLabel7.setBounds(590, 60, 150, 20);
 
-        jLabel14.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        jLabel14.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel14.setText("Rooms:");
-        add(jLabel14);
-        jLabel14.setBounds(40, 160, 70, 20);
+        roomsLabel.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        roomsLabel.setForeground(new java.awt.Color(0, 0, 0));
+        roomsLabel.setText("Rooms:");
+        roomsLabel.setVisible(false);
+        add(roomsLabel);
+        roomsLabel.setBounds(40, 160, 70, 20);
 
-        jComboBox1.addItem("Select Studio");
-        jComboBox1.addItemListener(new java.awt.event.ItemListener() {
+        Font font = clickLabel.getFont();
+        Map attributes = font.getAttributes();
+        attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+        clickLabel.setFont(font.deriveFont(attributes));
+        clickLabel.setForeground(new java.awt.Color(0, 0, 204));
+        clickLabel.setText("click here");
+        clickLabel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        clickLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                clickLabelMouseClicked(evt);
+            }
+        });
+        add(clickLabel);
+        clickLabel.setBounds(180, 90, 90, 20);
+
+        foravailLabel.setForeground(new java.awt.Color(0, 0, 0));
+        foravailLabel.setText("*for all available studios ");
+        add(foravailLabel);
+        foravailLabel.setBounds(40, 90, 170, 20);
+
+        studioComboBox.addItem("Select Studio");
+        studioComboBox.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                jComboBox1ItemStateChanged(evt);
+                studioComboBoxItemStateChanged(evt);
             }
         });
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        studioComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                studioComboBoxActionPerformed(evt);
             }
         });
-        add(jComboBox1);
-        jComboBox1.setBounds(160, 120, 120, 25);
+        studioComboBox.setVisible(false);
+        add(studioComboBox);
+        studioComboBox.setBounds(160, 120, 120, 25);
 
-        jButton3.setText("Create Session");
-        add(jButton3);
-        jButton3.setBounds(340, 350, 140, 26);
-
-        jButton2.setText("Invite Musicians");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        createButton.setText("Create Session");
+        createButton.setVisible(false);
+        createButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                createButtonActionPerformed(evt);
             }
         });
-        add(jButton2);
-        jButton2.setBounds(170, 350, 140, 26);
+        add(createButton);
+        createButton.setBounds(340, 350, 140, 26);
 
-        jLabel4.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel4.setText("Available Studio:");
-        add(jLabel4);
-        jLabel4.setBounds(40, 120, 130, 20);
-
-        jXDatePicker1.addActionListener(new java.awt.event.ActionListener() {
+        inviteButton.setText("Invite Musicians");
+        inviteButton.setVisible(false);
+        inviteButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jXDatePicker1ActionPerformed(evt);
+                inviteButtonActionPerformed(evt);
             }
         });
-        jXDatePicker1.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+        add(inviteButton);
+        inviteButton.setBounds(170, 350, 140, 26);
+        add(startTextField);
+        startTextField.setBounds(370, 60, 60, 26);
+
+        availstudiosLabel.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        availstudiosLabel.setForeground(new java.awt.Color(0, 0, 0));
+        availstudiosLabel.setText("Available Studio:");
+        availstudiosLabel.setVisible(false);
+        add(availstudiosLabel);
+        availstudiosLabel.setBounds(40, 120, 130, 20);
+
+        sessionDatePicker.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sessionDatePickerActionPerformed(evt);
+            }
+        });
+        sessionDatePicker.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
             public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                jXDatePicker1PropertyChange(evt);
+                sessionDatePickerPropertyChange(evt);
             }
         });
-        add(jXDatePicker1);
-        jXDatePicker1.setBounds(160, 60, 120, 26);
+        add(sessionDatePicker);
+        sessionDatePicker.setBounds(160, 60, 120, 26);
 
         jLabel6.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("Until:");
         add(jLabel6);
-        jLabel6.setBounds(460, 60, 60, 20);
+        jLabel6.setBounds(440, 60, 60, 30);
 
         jLabel5.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Start time:");
         add(jLabel5);
-        jLabel5.setBounds(300, 60, 80, 20);
+        jLabel5.setBounds(300, 60, 80, 30);
 
         jLabel3.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setText("Create New Session");
+        jLabel3.setText("Create Session");
         add(jLabel3);
         jLabel3.setBounds(0, 10, 850, 40);
 
@@ -271,103 +315,81 @@ public class CreateSession extends javax.swing.JPanel {
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Session's date:");
         add(jLabel2);
-        jLabel2.setBounds(40, 60, 130, 20);
+        jLabel2.setBounds(40, 60, 130, 30);
 
-        jSpinner3.setModel(new SpinnerDateModel());
-        jSpinner3.setEditor(new JSpinner.DateEditor(jSpinner3, "HH:mm"));
-        add(jSpinner3);
-        jSpinner3.setBounds(500, 60, 60, 24);
-
-        jSpinner2.setModel(new SpinnerDateModel());
-        jSpinner2.setEditor(new JSpinner.DateEditor(jSpinner2, "HH:mm"));
-        add(jSpinner2);
-        jSpinner2.setBounds(380, 60, 60, 24);
-
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/container3.png"))); // NOI18N
-        add(jLabel1);
-        jLabel1.setBounds(0, 0, 850, 580);
+        wallpaper.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/container3.png"))); // NOI18N
+        add(wallpaper);
+        wallpaper.setBounds(0, 0, 850, 580);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jXDatePicker1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXDatePicker1ActionPerformed
-        jXDatePicker1.setEditable(false);
-        if (jXDatePicker1.getDate() == null) {
+    private void sessionDatePickerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sessionDatePickerActionPerformed
+        //jXDatePicker1.setEditable(false);
+        
+    }//GEN-LAST:event_sessionDatePickerActionPerformed
+
+    private void studioComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_studioComboBoxItemStateChanged
+        
+    }//GEN-LAST:event_studioComboBoxItemStateChanged
+
+    private void sessionDatePickerPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_sessionDatePickerPropertyChange
+        
+    }//GEN-LAST:event_sessionDatePickerPropertyChange
+
+    private void studioComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_studioComboBoxActionPerformed
+        if (studioComboBox.getSelectedItem() == null || studioComboBox.getSelectedIndex() == 0) {
             return;
         }
-        Date selectedDate = new Date(jXDatePicker1.getDate().getTime()); 
-        Date selectedStart = new Date(((java.util.Date) jSpinner2.getValue()).getTime());
-        Date selectedEnd = new Date(((java.util.Date) jSpinner3.getValue()).getTime());
-        
-        HashMap<Integer, ArrayList<Integer>> studiosRooms = csController.getAvailableStudioRooms(selectedDate, selectedStart, selectedEnd);
-        for (Integer studio : studiosRooms.keySet()) {
-            jComboBox1.addItem(String.valueOf(studio));
-        }
-        
-    }//GEN-LAST:event_jXDatePicker1ActionPerformed
-
-    private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox1ItemStateChanged
-        
-    }//GEN-LAST:event_jComboBox1ItemStateChanged
-
-    private void jXDatePicker1PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jXDatePicker1PropertyChange
-        
-    }//GEN-LAST:event_jXDatePicker1PropertyChange
-
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        if (jComboBox1.getSelectedItem() == null || jComboBox1.getSelectedIndex() == 0) {
-            return;
-        }
-        if (jSpinner2.getValue().equals(jSpinner3.getValue())) {
-            JOptionPane.showMessageDialog(WindowManager.getMainFrame(),
-                "End time must be greater than start time",
-                "Input Warning",
-                JOptionPane.WARNING_MESSAGE);
-            jComboBox1.setSelectedIndex(0);
-            return;
-        }
+        roomsLabel.setVisible(true);
+        soundmansLabel.setVisible(true);
+        jScrollPane1.setVisible(true);
+        jScrollPane2.setVisible(true);
+        inviteButton.setVisible(true);
+        createButton.setVisible(true);
+        jLabel7.setVisible(true);
+        jLabel8.setVisible(true);
+        jLabel9.setVisible(true);
+        jLabel10.setVisible(true);
+        jLabel11.setVisible(true);
+        jLabel12.setVisible(true);
         jLabel8.setText("Name: ");
         jLabel9.setText("Address: ");
         jLabel10.setText("Email: ");
         jLabel11.setText("Phone number: ");
         jLabel12.setText("Description: ");
-        Date selectedDate = new Date(jXDatePicker1.getDate().getTime()); 
-        java.util.Date selectedStart = jXDatePicker1.getDate();
-        selectedStart.setHours(((java.util.Date)jSpinner2.getValue()).getHours());
-        selectedStart.setMinutes(((java.util.Date) jSpinner2.getValue()).getMinutes());
-        java.util.Date selectedEnd = jXDatePicker1.getDate();
-        selectedEnd.setHours(((java.util.Date) jSpinner3.getValue()).getHours());
-        selectedEnd.setMinutes(((java.util.Date) jSpinner3.getValue()).getMinutes());
-
-        HashMap<Integer, ArrayList<Integer>> studiosRooms = csController.getAvailableStudioRooms(selectedDate, selectedStart, selectedEnd);
+        Date selectedDate = new Date(sessionDatePicker.getDate().getTime()); 
+        java.util.Date selectedStart = sessionDatePicker.getDate();
+        java.util.Date selectedEnd = sessionDatePicker.getDate();
+        DefaultTableModel model = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int col) {
+                 switch (col) {
+                     case 2:
+                         return true;
+                     default:
+                         return false;
+                  }
+            }
+        }; 
+        roomsTable.setModel(model);
+        model.addColumn("Room No."); 
+        model.addColumn("Rec. Cell"); 
+        model.addColumn("Reserve");
+        TableColumn tc = roomsTable.getColumnModel().getColumn(1);
+        tc.setCellEditor(roomsTable.getDefaultEditor(Boolean.class));
+        tc.setCellRenderer(roomsTable.getDefaultRenderer(Boolean.class));
+        TableColumn tc2 = roomsTable.getColumnModel().getColumn(2);
+        tc2.setCellEditor(roomsTable.getDefaultEditor(Boolean.class));
+        tc2.setCellRenderer(roomsTable.getDefaultRenderer(Boolean.class));
+        
+        HashMap<Integer, ArrayList<Integer>> studiosRooms = CreateSessionControl.getAvailableStudioRooms(selectedDate, startTextField.getText(), endTextField.getText());
         for (Map.Entry<Integer, ArrayList<Integer>> entries : studiosRooms.entrySet()) {
             Integer key = entries.getKey();
             ArrayList<Integer> value =  entries.getValue();
-            
-            DefaultTableModel model = new DefaultTableModel() {
-                @Override
-                    public boolean isCellEditable(int row, int col) {
-                         switch (col) {
-                             case 2:
-                                 return true;
-                             default:
-                                 return false;
-                          }
-                    }
-            }; 
-            jTable1.setModel(model);
-            model.addColumn("Room No."); 
-            model.addColumn("Rec. Cell"); 
-            model.addColumn("Reserve");
-            TableColumn tc = jTable1.getColumnModel().getColumn(1);
-            tc.setCellEditor(jTable1.getDefaultEditor(Boolean.class));
-            tc.setCellRenderer(jTable1.getDefaultRenderer(Boolean.class));
-            TableColumn tc2 = jTable1.getColumnModel().getColumn(2);
-            tc2.setCellEditor(jTable1.getDefaultEditor(Boolean.class));
-            tc2.setCellRenderer(jTable1.getDefaultRenderer(Boolean.class));
-            if (String.valueOf(key).equals(String.valueOf(jComboBox1.getSelectedItem()))) {
+            if (String.valueOf(key).equals(String.valueOf(studioComboBox.getSelectedItem()))) {
                 try {
                     model.setRowCount(0);
                     for (Integer room : value) {
-                        Room tmpRoom = csController.getRoom(key, room);
+                        Room tmpRoom = CreateSessionControl.getRoom(key, room);
                         model.addRow(new Object[]{tmpRoom.getRoomNum(),tmpRoom.isRecordingCell(), false});
                     }
                     ResultSet rs = SessionsInTheRoom.getDB().query("SELECT tblStudio.*\n" +
@@ -384,130 +406,171 @@ public class CreateSession extends javax.swing.JPanel {
                         Logger.getLogger(CreateSession.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            roomsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
                 @Override
                 public void valueChanged(ListSelectionEvent e) {
-                    if (jTable1.getSelectedRow() > -1) {
+                    if (roomsTable.getSelectedRow() > -1) {
                     }                
                 }
             });
         }
-        DefaultTableModel model = new DefaultTableModel() {
-                @Override
-                    public boolean isCellEditable(int row, int col) {
-                         if (getValueAt(row, col) == null) {
-                            return false;
-                        } else return true;
-                    }
-            }; 
-            jTable2.setModel(model);
-            model.addColumn("Soundman ID");
-            model.addColumn("Name");
-            model.addColumn("Producer"); 
-            model.addColumn("Mix tech.");
-            model.addColumn("Master tech.");
-            model.addColumn("Total pay");
-            model.addColumn("Advanced pay");
-            TableColumn tc = jTable2.getColumnModel().getColumn(2);
-            tc.setCellEditor(jTable2.getDefaultEditor(Boolean.class));
-            tc.setCellRenderer(jTable2.getDefaultRenderer(Boolean.class));
-            TableColumn tc2 = jTable2.getColumnModel().getColumn(3);
-            tc2.setCellEditor(jTable2.getDefaultEditor(Boolean.class));
-            tc2.setCellRenderer(jTable2.getDefaultRenderer(Boolean.class));
-            TableColumn tc3 = jTable2.getColumnModel().getColumn(4);
-            tc3.setCellEditor(jTable2.getDefaultEditor(Boolean.class));
-            tc3.setCellRenderer(jTable2.getDefaultRenderer(Boolean.class));
-            jTable2.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-                @Override
-                public void valueChanged(ListSelectionEvent e) {
-                    if (jTable2.getSelectedRow() > -1) {
-                    }                
-                }
-            });
-        int selectedStud = Integer.valueOf(String.valueOf(jComboBox1.getSelectedItem()));
-        HashMap<Integer,SoundMan> availableSoundmans = csController.getAvailableSoundmans(selectedDate, selectedStart, selectedEnd,selectedStud);
-        for (Map.Entry<Integer, SoundMan> entries : availableSoundmans.entrySet()) {
-            Integer key = entries.getKey();
+        DefaultTableModel model2 = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int col) {
+                 if (getValueAt(row, col) == null) {
+                    return true;
+                } else return false;
+            }
+        }; 
+        soundmansTable.setModel(model2);
+        model2.addColumn("Name");
+        model2.addColumn("Producer"); 
+        model2.addColumn("Mix tech.");
+        model2.addColumn("Master tech.");
+        model2.addColumn("Total pay");
+        model2.addColumn("Advanced pay");
+        soundmansTable.getColumnModel().getColumn(0).setPreferredWidth(120);
+        TableColumn tc1 = soundmansTable.getColumnModel().getColumn(1);
+        tc1.setCellEditor(soundmansTable.getDefaultEditor(Boolean.class));
+        tc1.setCellRenderer(soundmansTable.getDefaultRenderer(Boolean.class));
+        TableColumn tc4 = soundmansTable.getColumnModel().getColumn(2);
+        tc4.setCellEditor(soundmansTable.getDefaultEditor(Boolean.class));
+        tc4.setCellRenderer(soundmansTable.getDefaultRenderer(Boolean.class));
+        TableColumn tc5 = soundmansTable.getColumnModel().getColumn(3);
+        tc5.setCellEditor(soundmansTable.getDefaultEditor(Boolean.class));
+        tc5.setCellRenderer(soundmansTable.getDefaultRenderer(Boolean.class));
+        soundmansTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (soundmansTable.getSelectedRow() > -1) {
+                }                
+            }
+        });
+        HashMap<String,SoundMan> availableSoundmans = CreateSessionControl.getAvailableSoundmans(selectedDate, startTextField.getText(), endTextField.getText(),String.valueOf(studioComboBox.getSelectedItem()));
+        for (Map.Entry<String, SoundMan> entries : availableSoundmans.entrySet()) {
+            String key = entries.getKey();
             SoundMan value =  entries.getValue();
-            model.addRow(new Object[]{key,value.getFreelancerName(),
-                                          value.isProducer()?null:false,
-                                          value.isMixTech()?null:false,
-                                          value.isMasterTech()?null:false,
-                                          value.getTotalPayment(),
-                                          value.getAdvancePay()});
+            String name = null;
+            if (CreateSessionControl.getFreelancer(key) != null) {
+                name = CreateSessionControl.getFreelancer(key).getFirst()+" "+CreateSessionControl.getFreelancer(key).getLast();
+            }
+            model2.addRow(new Object[]{name,
+                                        value.isProducer()?null:false,
+                                        value.isMixTech()?null:false,
+                                        value.isMasterTech()?null:false,
+                                        value.getTotalPayment(),
+                                        value.getAdvancePay()});
         }
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    }//GEN-LAST:event_studioComboBoxActionPerformed
 
-    private void jTable1PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jTable1PropertyChange
+    private void roomsTablePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_roomsTablePropertyChange
 
-    }//GEN-LAST:event_jTable1PropertyChange
+    }//GEN-LAST:event_roomsTablePropertyChange
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        if (jXDatePicker1.getDate() == null) {
+    private void inviteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inviteButtonActionPerformed
+        if (sessionDatePicker.getDate() == null) {
             return;
         }
         ArrayList<String> rooms = new ArrayList();
-        for (int i = 0; i < jTable1.getRowCount(); i++) {
-            if ((Boolean)jTable1.getValueAt(i, 2)) {
-                    rooms.add(String.valueOf(jTable1.getValueAt(i, 0)));
+        for (int i = 0; i < roomsTable.getRowCount(); i++) {
+            if ((Boolean)roomsTable.getValueAt(i, 2)) {
+                    rooms.add(String.valueOf(roomsTable.getValueAt(i, 0)));
             }
         }
         jPanel1.setVisible(true);
         jPanel1.setBounds(40, 390, 700, 170);
-        Date selectedDate = new Date(jXDatePicker1.getDate().getTime()); 
-        Date selectedStart = new Date(((java.util.Date) jSpinner2.getValue()).getTime());
-        Date selectedEnd = new Date(((java.util.Date) jSpinner3.getValue()).getTime());
-        DefaultTableModel model = new DefaultTableModel();
+        Date selectedDate = new Date(sessionDatePicker.getDate().getTime());
+        DefaultTableModel model = new DefaultTableModel() {
+            public boolean isCellEditable(int row, int col) {
+                 switch (col) {
+                     case 4:
+                         return true;
+                     case 5:
+                         return true;
+                     default:
+                         return false;
+                  }
+            }
+        };
         jTable3.setModel(model);
-        model.addColumn("Musician ID"); 
-        model.addColumn("Specialization");
         model.addColumn("Name"); 
+        model.addColumn("Specialization");
         model.addColumn("Wage"); 
         model.addColumn("Rank"); 
         model.addColumn("Invite");
         model.addColumn("Room"); 
-        TableColumn tc = jTable3.getColumnModel().getColumn(5);
+        jTable3.setRowHeight(30);
+        TableColumn tc = jTable3.getColumnModel().getColumn(4);
         tc.setCellEditor(jTable3.getDefaultEditor(Boolean.class));
         tc.setCellRenderer(jTable3.getDefaultRenderer(Boolean.class));
-        TableColumn tc2 = jTable3.getColumnModel().getColumn(6);
+        TableColumn tc2 = jTable3.getColumnModel().getColumn(5);
         tc2.setCellEditor(new DefaultCellEditor(new JComboBox<String>(rooms.toArray(new String[rooms.size()]))));
-        int selectedStud = Integer.valueOf(String.valueOf(jComboBox1.getSelectedItem()));
-        HashMap<Integer, Musician> availableMusicition = csController.getAvailableMusicition(selectedDate, selectedStart, selectedEnd,selectedStud);
-        for (Map.Entry<Integer, Musician> entries : availableMusicition.entrySet()) {
-            Integer key = entries.getKey();
+        TableColumn tc3 = jTable3.getColumnModel().getColumn(3);
+        int selectedStud = Integer.valueOf(String.valueOf(studioComboBox.getSelectedItem()));
+        HashMap<String, Musician> availableMusicition = CreateSessionControl.getAvailableMusicition(selectedDate, startTextField.getText(), endTextField.getText(),selectedStud);
+        for (Map.Entry<String, Musician> entries : availableMusicition.entrySet()) {
+            String key = entries.getKey();
             Musician value =  entries.getValue();
-            model.addRow(new Object[]{key,value.getType(),value.getName(),value.getCommission(),value.getRank(),false,"Select Room"});
+            RatingBarCell rbc = new RatingBarCell();
+            tc3.setCellEditor(rbc);
+            tc3.setCellRenderer(rbc);
+            rbc.getCellEditorValue().setRate(StudioRatesControl.getRankOf(selectedStud, key));
+            String name = CreateSessionControl.getFreelancer(key).getFirst()+" "+CreateSessionControl.getFreelancer(key).getLast();
+            model.addRow(new Object[]{name,value.getType(),value.getCommission(),rbc.getCellEditorValue(),false,"Select Room"});
         }
         jTable3.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 if (jTable3.getSelectedRow() > -1) {
-                    if (jTable3.getSelectedColumn()==6 && String.valueOf(jTable3.getValueAt(jTable3.getSelectedRow(), 5)).equals("false")) {
-                        JOptionPane.showMessageDialog(WindowManager.getMainFrame(),
-                            "Please invite the musician first",
-                            "Input Warning",
-                            JOptionPane.WARNING_MESSAGE);
+                    if (jTable3.getSelectedColumn() == 5 && !((Boolean)(jTable3.getValueAt(jTable3.getSelectedRow(), 4)))) {
+                        JOptionPane.showMessageDialog(null, "Please invite the musician first", "Input Warning", JOptionPane.WARNING_MESSAGE);
+                        jTable3.setValueAt("Select Room",jTable3.getSelectedRow(), 5);
                         return;
                     }
                 }       
             }
         });
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_inviteButtonActionPerformed
+
+    private void clickLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_clickLabelMouseClicked
+        if (sessionDatePicker.getDate() == null) {
+            return;
+        }
+        if (startTextField.getText().equals(endTextField.getText()) || (Integer.valueOf(startTextField.getText()).compareTo(Integer.valueOf(endTextField.getText()))) > 0) {
+            JOptionPane.showMessageDialog(WindowManager.getMainFrame(), "End time must be greater than start time", "Input Warning", JOptionPane.WARNING_MESSAGE);
+            startTextField.setText("");
+            endTextField.setText("");
+            studioComboBox.setSelectedIndex(0);
+            return;
+        }
+        availstudiosLabel.setVisible(true);
+        studioComboBox.setVisible(true);
+        Date selectedDate = new Date(sessionDatePicker.getDate().getTime()); 
+        HashMap<Integer, ArrayList<Integer>> studiosRooms = CreateSessionControl.getAvailableStudioRooms(selectedDate, startTextField.getText(), endTextField.getText());
+        for (Integer studio : studiosRooms.keySet()) {
+            studioComboBox.addItem(String.valueOf(studio));
+        }
+    }//GEN-LAST:event_clickLabelMouseClicked
+
+    private void createButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createButtonActionPerformed
+        if (CreateSessionControl.newSession(new Timestamp(sessionDatePicker.getDate().getTime()), startTextField.getText(), endTextField.getText(), WindowManager.getTmpArtist().getAlphaCode())) {
+            System.out.println("boundary.CreateSession.createButtonActionPerformed()");
+        }
+    }//GEN-LAST:event_createButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel availstudiosLabel;
+    private javax.swing.JLabel clickLabel;
+    private javax.swing.JButton createButton;
+    private javax.swing.JTextField endTextField;
+    private javax.swing.JLabel foravailLabel;
+    private javax.swing.JButton inviteButton;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -517,11 +580,14 @@ public class CreateSession extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JSpinner jSpinner2;
-    private javax.swing.JSpinner jSpinner3;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
     private javax.swing.JTable jTable3;
-    private org.jdesktop.swingx.JXDatePicker jXDatePicker1;
+    private javax.swing.JLabel roomsLabel;
+    private javax.swing.JTable roomsTable;
+    private org.jdesktop.swingx.JXDatePicker sessionDatePicker;
+    private javax.swing.JLabel soundmansLabel;
+    private javax.swing.JTable soundmansTable;
+    private javax.swing.JTextField startTextField;
+    private javax.swing.JComboBox<String> studioComboBox;
+    private javax.swing.JLabel wallpaper;
     // End of variables declaration//GEN-END:variables
 }

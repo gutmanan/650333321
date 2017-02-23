@@ -28,7 +28,7 @@ public abstract class StudioRatesControl {
         try {
             while (rs.next()) {
                 freelancers.add(new Freelancer(rs.getString(1), rs.getString(2), rs.getString(3), rs.getDate(4),
-                        rs.getString(5), rs.getString(6), rs.getString(8)));
+                    rs.getString(5), rs.getString(6), rs.getString(8)));
             }
         } catch (SQLException ex) {
             Logger.getLogger(StudioRatesControl.class.getName()).log(Level.SEVERE, null, ex);
@@ -49,5 +49,13 @@ public abstract class StudioRatesControl {
             Logger.getLogger(StudioRatesControl.class.getName()).log(Level.SEVERE, null, ex);
         }
         return --rank;
+    }
+    public static boolean updateRates(int studio, String freelancer, int rank) {
+        String qry = "UPDATE tblFreelancerWorkWith SET tblFreelancerWorkWith.rank ="+rank+"\n" +
+                         "WHERE (((tblFreelancerWorkWith.studioNumber)="+studio+") AND ((tblFreelancerWorkWith.freelancerID)=\""+freelancer+"\"))";
+        if (DBManager.insert(qry) == -2) {
+            return true;
+        }
+        return false;
     }
 }

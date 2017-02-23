@@ -183,10 +183,6 @@ public class CreateStudio extends javax.swing.JPanel {
         String phone = phoneField.getText();
         String address = streetTextField.getText()+" "+houseTextField.getText()+", "+String.valueOf(cityComboBox.getSelectedItem());
         if (CreateStudioControl.insertNewStudio(studioName, description, email, phone, address)) {
-            JOptionPane.showMessageDialog(this,
-                "The studio was created successfully!",
-                "Studio was created",
-                JOptionPane.INFORMATION_MESSAGE);
             WindowManager.openWin(new CreateStudio());
             return;
         }

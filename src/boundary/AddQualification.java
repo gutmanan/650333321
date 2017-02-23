@@ -29,6 +29,8 @@ import businessLogic.SessionsInTheRoom;
 import businessLogic.WindowManager;
 import entity.E_CITIES;
 import entity.Studio;
+import java.awt.Font;
+import java.awt.font.TextAttribute;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collections;
@@ -56,6 +58,9 @@ import javax.swing.table.TableColumn;
 public class AddQualification extends javax.swing.JPanel {
         
     public AddQualification() {
+        if (WindowManager.getTmpFreelancer() == null) {
+            return;
+        }
         initComponents();
     }
 
@@ -70,11 +75,15 @@ public class AddQualification extends javax.swing.JPanel {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
         musicianPanel = new javax.swing.JPanel();
+        addInstrumentLabel = new javax.swing.JLabel();
+        clickLabel = new javax.swing.JLabel();
+        cannotLabel = new javax.swing.JLabel();
         instrumentLabel = new javax.swing.JLabel();
         wageLabel = new javax.swing.JLabel();
         wageTextField = new javax.swing.JTextField();
         instrumentTextField = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
+        saveButton = new javax.swing.JButton();
+        instrumentComboBox = new javax.swing.JComboBox<>();
         soundmanPanel = new javax.swing.JPanel();
         mixCheckBox = new javax.swing.JCheckBox();
         masterCheckBox = new javax.swing.JCheckBox();
@@ -86,7 +95,7 @@ public class AddQualification extends javax.swing.JPanel {
         ProducerLabel = new javax.swing.JLabel();
         advancedTextField = new javax.swing.JTextField();
         totalTextField = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        saveButton0 = new javax.swing.JButton();
         musicianLabel = new javax.swing.JLabel();
         soundmanLabel = new javax.swing.JLabel();
         SoundmanRadioButton = new javax.swing.JRadioButton();
@@ -102,6 +111,32 @@ public class AddQualification extends javax.swing.JPanel {
         musicianPanel.setOpaque(false);
         musicianPanel.setLayout(null);
 
+        addInstrumentLabel.setForeground(new java.awt.Color(0, 0, 0));
+        addInstrumentLabel.setText("Add instrument:");
+        addInstrumentLabel.setVisible(false);
+        musicianPanel.add(addInstrumentLabel);
+        addInstrumentLabel.setBounds(30, 150, 120, 30);
+
+        Font font = clickLabel.getFont();
+        Map attributes = font.getAttributes();
+        attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+        clickLabel.setFont(font.deriveFont(attributes));
+        clickLabel.setForeground(new java.awt.Color(0, 0, 204));
+        clickLabel.setText("click here");
+        clickLabel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        clickLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                clickLabelMouseClicked(evt);
+            }
+        });
+        musicianPanel.add(clickLabel);
+        clickLabel.setBounds(190, 110, 90, 30);
+
+        cannotLabel.setForeground(new java.awt.Color(0, 0, 0));
+        cannotLabel.setText("Cannot find an instrument?");
+        musicianPanel.add(cannotLabel);
+        cannotLabel.setBounds(30, 110, 170, 30);
+
         instrumentLabel.setForeground(new java.awt.Color(0, 0, 0));
         instrumentLabel.setText("Instrument:");
         musicianPanel.add(instrumentLabel);
@@ -113,12 +148,25 @@ public class AddQualification extends javax.swing.JPanel {
         wageLabel.setBounds(30, 30, 110, 30);
         musicianPanel.add(wageTextField);
         wageTextField.setBounds(150, 30, 140, 30);
-        musicianPanel.add(instrumentTextField);
-        instrumentTextField.setBounds(150, 70, 140, 30);
 
-        jButton2.setText("Save");
-        musicianPanel.add(jButton2);
-        jButton2.setBounds(270, 130, 100, 26);
+        instrumentTextField.setVisible(false);
+        musicianPanel.add(instrumentTextField);
+        instrumentTextField.setBounds(150, 150, 140, 30);
+
+        saveButton.setText("Save");
+        saveButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveButtonActionPerformed(evt);
+            }
+        });
+        musicianPanel.add(saveButton);
+        saveButton.setBounds(270, 210, 100, 26);
+
+        instrumentComboBox.addItem("Select Instrument");
+        for (String s : AddQualificationControl.getAllInstruments())
+        instrumentComboBox.addItem(s);
+        musicianPanel.add(instrumentComboBox);
+        instrumentComboBox.setBounds(150, 70, 140, 30);
 
         add(musicianPanel);
         musicianPanel.setBounds(70, 260, 410, 300);
@@ -180,14 +228,14 @@ public class AddQualification extends javax.swing.JPanel {
         soundmanPanel.add(totalTextField);
         totalTextField.setBounds(150, 30, 140, 30);
 
-        jButton1.setText("Save");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        saveButton0.setText("Save");
+        saveButton0.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                saveButton0ActionPerformed(evt);
             }
         });
-        soundmanPanel.add(jButton1);
-        jButton1.setBounds(270, 250, 100, 26);
+        soundmanPanel.add(saveButton0);
+        saveButton0.setBounds(270, 250, 100, 26);
 
         add(soundmanPanel);
         soundmanPanel.setBounds(70, 260, 410, 300);
@@ -208,6 +256,7 @@ public class AddQualification extends javax.swing.JPanel {
 
         buttonGroup1.add(SoundmanRadioButton);
         SoundmanRadioButton.setContentAreaFilled(false);
+        SoundmanRadioButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         SoundmanRadioButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/Soundman1.png"))); // NOI18N
         SoundmanRadioButton.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/Soundman2.png"))); // NOI18N
         SoundmanRadioButton.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/Soundman2.png"))); // NOI18N
@@ -221,6 +270,7 @@ public class AddQualification extends javax.swing.JPanel {
 
         buttonGroup1.add(MusicianRadioButton);
         MusicianRadioButton.setContentAreaFilled(false);
+        MusicianRadioButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         MusicianRadioButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/Musician1.png"))); // NOI18N
         MusicianRadioButton.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/Musician2.png"))); // NOI18N
         MusicianRadioButton.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/Musician2.png"))); // NOI18N
@@ -250,6 +300,7 @@ public class AddQualification extends javax.swing.JPanel {
 
     private void SoundmanRadioButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_SoundmanRadioButtonStateChanged
         ButtonModel mod = SoundmanRadioButton.getModel();
+        autoFillSoundman(AddQualificationControl.alreadySoundman(WindowManager.getTmpFreelancer().getFreelancerID()));
         if (SoundmanRadioButton.isSelected()) {
             soundmanLabel.setVisible(true);
             musicianLabel.setVisible(false);
@@ -266,6 +317,7 @@ public class AddQualification extends javax.swing.JPanel {
 
     private void MusicianRadioButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_MusicianRadioButtonStateChanged
         ButtonModel mod = MusicianRadioButton.getModel();
+        autoFillMusician(AddQualificationControl.alreadyMusician(WindowManager.getTmpFreelancer().getFreelancerID()));
         if (MusicianRadioButton.isSelected()) {
             musicianLabel.setVisible(true);
             soundmanLabel.setVisible(false);
@@ -292,45 +344,83 @@ public class AddQualification extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_mixCheckBoxActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void saveButton0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButton0ActionPerformed
         String freelancerID = WindowManager.getTmpFreelancer().getFreelancerID();
-        Integer advanced = Integer.valueOf(advancedTextField.getText());
-        Integer total = Integer.valueOf(advancedTextField.getText());
         boolean master = masterCheckBox.isSelected();
         boolean mix = mixCheckBox.isSelected();
         boolean producer = producerCheckBox.isSelected();
-        if (AddQualificationControl.insertNewSoundman(freelancerID, advanced, total, producer, master, mix)) {
-            JOptionPane.showMessageDialog(this,
-                "The studio was created successfully!",
-                "Studio was created",
-                JOptionPane.INFORMATION_MESSAGE);
+        if (AddQualificationControl.insertNewSoundman(freelancerID, advancedTextField.getText(), totalTextField.getText(), producer, master, mix)) {
             WindowManager.openWin(new AddQualification());
             return;
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_saveButton0ActionPerformed
 
-public List<E_CITIES> ListOfCity(String country){
-    List<E_CITIES> cityList = new ArrayList<E_CITIES>();
+    private void clickLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_clickLabelMouseClicked
+        if (!instrumentTextField.isVisible()) {
+            instrumentTextField.setVisible(true);
+            addInstrumentLabel.setVisible(true);
+            return;
+        }
+        instrumentTextField.setText("");
+        instrumentTextField.setVisible(false);
+        addInstrumentLabel.setVisible(false);
+    }//GEN-LAST:event_clickLabelMouseClicked
 
-    for (E_CITIES city : E_CITIES.values()){
-        if (country.equals(city.getCountry()) && !cityList.contains(city))
-            cityList.add(city);
-    }
-    Collections.sort(cityList);
-    return cityList;
+    private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
+        String freelancerID = WindowManager.getTmpFreelancer().getFreelancerID();
+        String instrument;
+        boolean isNew = true;
+        if (instrumentComboBox.getSelectedIndex() != 0 && instrumentTextField.getText().isEmpty()) {
+            instrument = String.valueOf(instrumentComboBox.getSelectedItem());
+            isNew = false;
+        } else instrument = instrumentTextField.getText();
+        if (AddQualificationControl.insertNewMusician(freelancerID, wageTextField.getText(), instrument, isNew)) {
+            WindowManager.openWin(new AddQualification());
+            return;
+        }
+    }//GEN-LAST:event_saveButtonActionPerformed
+
+public void autoFillSoundman(SoundMan tmp) {
+    if (tmp == null) 
+        return;
+    totalTextField.setText(String.valueOf(tmp.getTotalPayment()));
+    totalTextField.setEditable(false);
+    advancedTextField.setText(String.valueOf(tmp.getAdvancePay()));
+    advancedTextField.setEditable(false);
+    masterCheckBox.setSelected(tmp.isMasterTech());
+    masterCheckBox.setEnabled(false);
+    mixCheckBox.setSelected(tmp.isMixTech());
+    mixCheckBox.setEnabled(false);
+    producerCheckBox.setSelected(tmp.isProducer());
+    producerCheckBox.setEnabled(false);
+    saveButton0.setEnabled(false);
+}
+
+public void autoFillMusician(Musician tmp) {
+    if (tmp == null) 
+        return;
+    wageTextField.setText(String.valueOf(tmp.getCommission()));
+    wageTextField.setEditable(false);
+    instrumentComboBox.setSelectedItem(tmp.getType());
+    instrumentComboBox.setEnabled(false);
+    cannotLabel.setVisible(false);
+    clickLabel.setVisible(false);
+    saveButton.setEnabled(false);
 }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JRadioButton MusicianRadioButton;
     private javax.swing.JLabel ProducerLabel;
     private javax.swing.JRadioButton SoundmanRadioButton;
+    private javax.swing.JLabel addInstrumentLabel;
     private javax.swing.JLabel advancedLabel;
     private javax.swing.JTextField advancedTextField;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JLabel cannotLabel;
+    private javax.swing.JLabel clickLabel;
+    private javax.swing.JComboBox<String> instrumentComboBox;
     private javax.swing.JLabel instrumentLabel;
     private javax.swing.JTextField instrumentTextField;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JCheckBox masterCheckBox;
     private javax.swing.JLabel masterLabel;
     private javax.swing.JCheckBox mixCheckBox;
@@ -339,6 +429,8 @@ public List<E_CITIES> ListOfCity(String country){
     private javax.swing.JPanel musicianPanel;
     private javax.swing.JCheckBox producerCheckBox;
     private javax.swing.JLabel roomCountLabel;
+    private javax.swing.JButton saveButton;
+    private javax.swing.JButton saveButton0;
     private javax.swing.JLabel soundmanLabel;
     private javax.swing.JPanel soundmanPanel;
     private javax.swing.JLabel titleLabel;

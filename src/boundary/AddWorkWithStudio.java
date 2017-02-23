@@ -5,6 +5,7 @@
  */
 package boundary;
 
+import businessLogic.AddWorkWithStudioControl;
 import entity.Musician;
 import businessLogic.CreateSessionControl;
 import businessLogic.CreateStudioControl;
@@ -15,6 +16,7 @@ import java.util.Map;
 import entity.Room;
 import entity.SoundMan;
 import businessLogic.SessionsInTheRoom;
+import businessLogic.ValidatorManager;
 import businessLogic.WindowManager;
 import entity.E_CITIES;
 import entity.Studio;
@@ -41,7 +43,11 @@ import javax.swing.table.TableColumn;
 public class AddWorkWithStudio extends javax.swing.JPanel {
         
     public AddWorkWithStudio() {
+        if (WindowManager.getTmpFreelancer() == null) {
+            return;
+        }
         initComponents();
+        switches = new ArrayList<>();
         setTable();
     }
 
@@ -85,11 +91,11 @@ public class AddWorkWithStudio extends javax.swing.JPanel {
 
         housNumLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         housNumLabel1.setForeground(new java.awt.Color(0, 0, 0));
-        housNumLabel1.setText("Please select the studios you wish to work with:");
+        housNumLabel1.setText("Please select the studios you wish to work with (press on the studio row to read about it):");
         add(housNumLabel1);
-        housNumLabel1.setBounds(60, 60, 350, 20);
+        housNumLabel1.setBounds(60, 60, 650, 20);
 
-        descriptionLabel.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        descriptionLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         descriptionLabel.setForeground(new java.awt.Color(0, 0, 0));
         descriptionLabel.setText("Description:");
         add(descriptionLabel);
@@ -124,19 +130,23 @@ public class AddWorkWithStudio extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void createButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createButtonActionPerformed
-
+        int counter = 0;
+        for (Switched s:switches) {
+            if (s.switchPos()) {
+                if (AddWorkWithStudioControl.insertWork(s.Studio)) {
+                    counter++;
+                }
+            } else if (AddWorkWithStudioControl.deleteWork(s.Studio)) {
+                counter++;
+            }
+        }
+        if (counter == switches.size()) {
+            JOptionPane.showMessageDialog(null,
+            "Working studios were updated!",
+            "Updating complete",
+            JOptionPane.INFORMATION_MESSAGE);
+        }
     }//GEN-LAST:event_createButtonActionPerformed
-
-public List<E_CITIES> ListOfCity(String country){
-    List<E_CITIES> cityList = new ArrayList<E_CITIES>();
-
-    for (E_CITIES city : E_CITIES.values()){
-        if (country.equals(city.getCountry()) && !cityList.contains(city))
-            cityList.add(city);
-    }
-    Collections.sort(cityList);
-    return cityList;
-}
 
 public void setTable(){
     DefaultTableModel model = new DefaultTableModel() {
@@ -156,14 +166,51 @@ public void setTable(){
     model.addColumn("Email"); 
     model.addColumn("Phone"); 
     model.addColumn("Addrees");
-    model.addColumn("Choose");
+    model.addColumn("Select");
     TableColumn tc = jTable1.getColumnModel().getColumn(5);
     tc.setCellEditor(jTable1.getDefaultEditor(Boolean.class));
     tc.setCellRenderer(jTable1.getDefaultRenderer(Boolean.class));
     model.setRowCount(0);
+    boolean status;
     for (Studio s : CreateStudioControl.getStudios()) {
-        model.addRow(new Object[]{s.getStudioID(),s.getStudioName(),s.getEmail(),s.getPhoneNum(), s.getAddress(), false});
+        status = AddWorkWithStudioControl.alreadyWork(s.getStudioID());
+        model.addRow(new Object[]{s.getStudioID(),s.getStudioName(),s.getEmail(),s.getPhoneNum(), s.getAddress(), status});
+        if (jTable1.getRowCount()>0) {
+            switches.add(new Switched(s.getStudioID(), status, status, jTable1.getRowCount()-1));
+        }
     }
+    jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+        @Override
+        public void valueChanged(ListSelectionEvent e) {
+            if (jTable1.getSelectedRow() > -1) {
+                String stdS = String.valueOf(jTable1.getValueAt(jTable1.getSelectedRow(), 0));
+                descriptionTextArea.setText(AddWorkWithStudioControl.getDescription(Integer.valueOf(stdS)));
+                if (jTable1.getSelectedColumn() == 5) {
+                    for (Switched switche : switches) {
+                        if (switche.row == jTable1.getSelectedRow()) {
+                            switche.setTo(!switche.from);
+                        }
+                    }
+                }
+            }    
+        }
+    });
+}
+class Switched {
+    protected int Studio;
+    protected boolean from;
+    protected boolean to;
+    protected int row;
+    public Switched(int studio, boolean from,boolean to, int row){
+        this.Studio = studio;
+        this.from = from;
+        this.to = to;
+        this.row = row;
+    }
+    public void setTo(boolean to) {this.to = to;}
+    public void setRow(int row) {this.row = row;}
+    public boolean noSwitch() {return from == to;}
+    public boolean switchPos() {return !from && to;}
 }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton createButton;
@@ -176,4 +223,5 @@ public void setTable(){
     private javax.swing.JLabel titleLabel;
     private javax.swing.JLabel wallpaper;
     // End of variables declaration//GEN-END:variables
+    ArrayList<Switched> switches;
 }

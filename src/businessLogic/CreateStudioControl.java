@@ -21,9 +21,23 @@ public abstract class CreateStudioControl {
     
     public CreateStudioControl() {}
     public static boolean insertNewStudio(String name, String description, String email, String phone, String address) {
+        if (!(ValidatorManager.isAlpha(name))){
+            JOptionPane.showMessageDialog(null, "The name field must contain only letters.");
+            return false;
+        }
+        
+        if (!(ValidatorManager.isValidEmailAddress(email))){
+            JOptionPane.showMessageDialog(null, "The Email field is incorrect. \n Example : abc@def.com");
+            return false;
+        }
+        
         String qry = "INSERT INTO tblStudio (studioName, description, email, phone, address)\n"
                    + "VALUES('"+name+"','"+description+"','"+email+"','"+phone+"','"+address+"')";
         if (DBManager.insert(qry) > -1) {
+            JOptionPane.showMessageDialog(null,
+                "The studio was created successfully!",
+                "Studio was created",
+                JOptionPane.INFORMATION_MESSAGE);
             return true;
         }
         return false;

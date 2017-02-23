@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -34,10 +35,23 @@ public abstract class AddRoomControl {
         return rooms;
     }
     
-    public static boolean insertNewRoom(int roomID, int studioID, boolean recCell, int capacity, int price) {
+    public static boolean insertNewRoom(int roomID, int studioID, boolean recCell, String capacity, String price) {
+        if (!(ValidatorManager.onlyContainsNumbers(capacity))){
+            JOptionPane.showMessageDialog(null, "The Capacity field must be a number.");
+            return false;
+        }
+
+        if (!(ValidatorManager.onlyContainsNumbers(price))){
+            JOptionPane.showMessageDialog(null, "The Price field must be a number.");
+            return false;
+        }
         String qry = "INSERT INTO tblRoom (RoomNumber, studioNumber, RecordingCell, Capacity, Price)\n"
                    + "VALUES('"+roomID+"','"+studioID+"','"+recCell+"','"+capacity+"','"+price+"')";
         if (DBManager.insert(qry) == -2) {
+            JOptionPane.showMessageDialog(null,
+                "The room was added successfully!",
+                "Room was added",
+                JOptionPane.INFORMATION_MESSAGE);
             return true;
         }
         return false;

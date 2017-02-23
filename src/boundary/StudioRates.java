@@ -36,6 +36,7 @@ public class StudioRates extends javax.swing.JPanel {
     private Map<String, StudiosFreelancers> hm;
     public StudioRates() {
         initComponents();
+        switches = new ArrayList<>();
     }
 
     /**
@@ -119,6 +120,11 @@ public class StudioRates extends javax.swing.JPanel {
         jLabel12.setBounds(470, 190, 340, 20);
 
         updateButton.setText("Update");
+        updateButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateButtonActionPerformed(evt);
+            }
+        });
         add(updateButton);
         updateButton.setBounds(570, 510, 140, 26);
 
@@ -182,6 +188,26 @@ public class StudioRates extends javax.swing.JPanel {
         setTable(tmpStudio.getStudioID());
     }//GEN-LAST:event_studioComboBoxActionPerformed
 
+    private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
+        int counterA = 0;
+        int counterB = 0;
+        for (Switched switche : switches) {
+            if (!switche.noSwitch()) {
+                counterA++;
+                if (StudioRatesControl.updateRates(switche.Studio, switche.freelancer, ++switche.to)) {
+                    counterB++;
+                }
+            }
+        }
+        if (counterA == counterB) {
+            JOptionPane.showMessageDialog(null,
+            "Freelancers ratings were updated!",
+            "Updating complete",
+            JOptionPane.INFORMATION_MESSAGE);
+        }
+        switches.clear();
+    }//GEN-LAST:event_updateButtonActionPerformed
+
 public List<E_CITIES> ListOfCity(String country){
     List<E_CITIES> cityList = new ArrayList<E_CITIES>();
 
@@ -226,7 +252,12 @@ public void setTable(int selectedStudio){
         tc.setCellRenderer(rbc);
         rbc.getCellEditorValue().setRate(hm.get(f.getFreelancerID()).getRating());
         model.addRow(new Object[]{f.getFreelancerID(),f.getFirst(), f.getLast(),"50", rbc.getCellEditorValue()});
+        if (jTable1.getRowCount()>0) {
+            switches.add(new Switched(selectedStudio, f.getFreelancerID(), 
+                    rbc.getCellEditorValue().getRate(), rbc.getCellEditorValue().getRate(),jTable1.getRowCount()-1));
+        }
     }
+    
     final RatingBar updated = new RatingBar();
     jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
@@ -236,6 +267,11 @@ public void setTable(int selectedStudio){
                         return;
                     if (jTable1.getSelectedColumn() == 4 ) {
                         JOptionPane.showMessageDialog(null,updated,"Update Rating", JOptionPane.PLAIN_MESSAGE);
+                        for (Switched switche : switches) {
+                            if (switche.row == jTable1.getSelectedRow()) {
+                                switche.setTo(updated.getRate());
+                            }
+                        }
                         jTable1.setValueAt(updated, jTable1.getSelectedRow(), 4);
                         hm.get(String.valueOf(jTable1.getValueAt(jTable1.getSelectedRow(), 0))).setRating(updated.getRate());
                         setTable(hm.get(String.valueOf(jTable1.getValueAt(jTable1.getSelectedRow(), 0))).getStudioID());
@@ -246,9 +282,26 @@ public void setTable(int selectedStudio){
         });
 }
 
+class Switched {
+    protected int Studio;
+    protected String freelancer;
+    protected int from;
+    protected int to;
+    protected int row;
+    public Switched(int studio, String freelancer, int from,int to, int row){
+        this.Studio = studio;
+        this.freelancer = freelancer;
+        this.from = from;
+        this.to = to;
+        this.row = row;
+    }
+    public void setTo(int to) {this.to = to;}
+    public void setRow(int row) {this.row = row;}
+    public boolean noSwitch() {return from == to;}
+    @Override public String toString() {return this.from+" to "+this.to;}
+}
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> dayBox;
-    private javax.swing.JComboBox<String> dayBox1;
     private javax.swing.JLabel existedRoomsLabel;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -258,18 +311,12 @@ public void setTable(int selectedStudio){
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
-    private javax.swing.JComboBox<String> monthBox;
-    private javax.swing.JComboBox<String> monthBox1;
-    private javax.swing.JInternalFrame newAccountFrame;
-    private javax.swing.JInternalFrame newAccountFrame1;
-    private javax.swing.JButton registerButton;
-    private javax.swing.JButton registerButton1;
     private javax.swing.JComboBox<String> studioComboBox;
     private javax.swing.JLabel studioNameLabel;
     private javax.swing.JLabel titleLabel;
     private javax.swing.JButton updateButton;
     private javax.swing.JLabel wallpaper;
-    private javax.swing.JComboBox<String> yearBox;
-    private javax.swing.JComboBox<String> yearBox1;
     // End of variables declaration//GEN-END:variables
+    ArrayList<Switched> switches;
+
 }

@@ -3,17 +3,15 @@ package entity;
 
 public class SoundMan {
     
-    private int freelancerID;
-    String freelancerName;
+    private String freelancerID;
     private int TotalPayment;
     private int AdvancePay;
     private boolean Producer;
     private boolean MixTech;
     private boolean MasterTech;
 
-    public SoundMan(int freelancerID, boolean Producer, boolean MixTech, boolean MasterTech, String freelancerName, int TotalPayment, int AdvancePay) {
+    public SoundMan(String freelancerID, int AdvancePay, int TotalPayment, boolean MasterTech, boolean MixTech, boolean Producer) {
         this.freelancerID = freelancerID;
-        this.freelancerName = freelancerName;
         this.TotalPayment = TotalPayment;
         this.AdvancePay = AdvancePay;
         this.Producer = Producer;
@@ -21,12 +19,8 @@ public class SoundMan {
         this.MasterTech = MasterTech;
     }
 
-    public int getFreelancerID() {
+    public String getFreelancerID() {
         return freelancerID;
-    }
-
-    public String getFreelancerName() {
-        return freelancerName;
     }
 
     public int getTotalPayment() {
@@ -37,8 +31,6 @@ public class SoundMan {
         return AdvancePay;
     }
     
-    
-
     public boolean isProducer() {
         return Producer;
     }
