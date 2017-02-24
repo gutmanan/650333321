@@ -48,7 +48,6 @@ public abstract class AddQualificationControl {
         }
         return false;
     } 
-    
     public static boolean insertNewMusician(String freelancerID, String wage, String instrument, boolean isNew) {
         if (!(ValidatorManager.onlyContainsNumbers(wage))){
             JOptionPane.showMessageDialog(null, "The Hourly wage field must be a number.");
@@ -70,17 +69,18 @@ public abstract class AddQualificationControl {
                     JOptionPane.INFORMATION_MESSAGE);
                 return true;
             }
-        } else 
-            if (DBManager.insert(qry) == -2) {
-                JOptionPane.showMessageDialog(null,
-                    "Congratulations! you have been registered as a musician.",
-                    "Registration complete",
-                    JOptionPane.INFORMATION_MESSAGE);
-                return true;
-            }
+        } else if (isNew && !insertInstrument(instrument)){
+            JOptionPane.showMessageDialog(null, "The Instrument is already exist.");
+            return false;
+        } else if (DBManager.insert(qry) == -2) {
+            JOptionPane.showMessageDialog(null,
+                "Congratulations! you have been registered as a musician.",
+                "Registration complete",
+                JOptionPane.INFORMATION_MESSAGE);
+            return true;
+        }
         return false;
     } 
-    
     public static ArrayList<String> getAllInstruments() {
         ResultSet rs = DBManager.query("SELECT tblSpecialization.*\n"
                                      + "FROM tblSpecialization\n");
@@ -93,16 +93,14 @@ public abstract class AddQualificationControl {
          }
          return ins;
     }
-    
     public static boolean insertInstrument(String instrument) {
         String qry = "INSERT INTO tblSpecialization (Type)\n"
                    + "VALUES('"+instrument+"')";
-        if (DBManager.insert(qry) == -2) {
+        if (!specialityExist(instrument) && DBManager.insert(qry) == -2) {
             return true;
         }
         return false;
     } 
-    
     public static SoundMan alreadySoundman(String freelancerID) {
         ResultSet rs = DBManager.query("SELECT tblSoundMan.*\n"
                                      + "FROM tblSoundMan\n"
@@ -119,7 +117,6 @@ public abstract class AddQualificationControl {
          }
          return tmp;
     }
-    
     public static Musician alreadyMusician(String freelancerID) {
         ResultSet rs = DBManager.query("SELECT tblMusician.*\n"
                                      + "FROM tblMusician\n"
@@ -135,5 +132,17 @@ public abstract class AddQualificationControl {
              Logger.getLogger(AddQualificationControl.class.getName()).log(Level.SEVERE, null, ex);
          }
          return tmp;
+    }
+    public static boolean specialityExist(String speciality) {
+        ResultSet rs = DBManager.query("SELECT tblSpecialization.*\n"
+                                     + "FROM tblSpecialization\n"
+                                     + "WHERE tblSpecialization.Type=\""+speciality+"\"");
+         try {
+             if (!rs.isBeforeFirst()) {
+                 return false;
+             }} catch (SQLException ex) {
+             Logger.getLogger(AddQualificationControl.class.getName()).log(Level.SEVERE, null, ex);
+         }
+         return true;
     }
 }

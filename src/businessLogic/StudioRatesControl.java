@@ -22,8 +22,8 @@ public abstract class StudioRatesControl {
     
     public static ArrayList<Freelancer> getFreelancersWorkingWith(int studioID)  {
         ResultSet rs = SessionsInTheRoom.getDB().query("SELECT tblFreelancer.*\n" +
-"FROM tblFreelancer INNER JOIN tblFreelancerWorkWith ON tblFreelancer.FreelancerID = tblFreelancerWorkWith.freelancerID\n" +
-"WHERE (((tblFreelancerWorkWith.studioNumber)="+studioID+"))");
+                    "FROM tblFreelancer INNER JOIN tblFreelancerWorkWith ON tblFreelancer.FreelancerID = tblFreelancerWorkWith.freelancerID\n" +
+                    "WHERE (((tblFreelancerWorkWith.studioNumber)="+studioID+"))");
         ArrayList<Freelancer> freelancers = new ArrayList<>();
         try {
             while (rs.next()) {

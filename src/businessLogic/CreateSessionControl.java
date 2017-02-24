@@ -9,6 +9,7 @@ import entity.Freelancer;
 import entity.Musician;
 import entity.Session;
 import entity.Room;
+import entity.SessionsRooms;
 import entity.SoundMan;
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -16,6 +17,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,13 +34,15 @@ public abstract class CreateSessionControl {
                                                        "FROM tblRoom;");
         ResultSet rs3 = SessionsInTheRoom.getDB().query("SELECT tblSessionLocation.StudioNumber, tblSessionLocation.roomNumber, tblSession.SessionDate, tblSession.startTime, tblSession.endTime, tblSessionLocation.SessionNumber\n" +
                                                 "FROM [tblSession] INNER JOIN tblSessionLocation ON tblSession.SessionNumber = tblSessionLocation.SessionNumber\n" +
-                                                "WHERE (((tblSession.SessionDate)=#"+selectedDate+"#));");
+                                                "WHERE (((tblSession.SessionDate)=#"+selectedDate+"#))");
         ArrayList<Session> sessions = new ArrayList<>();
+        ArrayList<SessionsRooms> sessionsRooms = new ArrayList<>();
         ArrayList<Room> rooms = new ArrayList();
         HashMap<Integer, ArrayList<Integer>> availableStudioRooms = new HashMap<>();
         try {
             while (rs3.next()) {
-                sessions.add(new Session(rs3.getInt(1),rs3.getInt(2), rs3.getInt(6),rs3.getDate(3), rs3.getTime(4), rs3.getTime(5)));
+                sessionsRooms.add(new SessionsRooms(rs3.getInt(1),rs3.getInt(2), rs3.getInt(6)));
+                sessions.add(new Session(rs3.getInt(6), rs3.getTimestamp(3), rs3.getTimestamp(4).getHours(), rs3.getTimestamp(5).getHours()));
             }
             while (rs.next()) {
                 rooms.add(new Room(rs.getInt(1), rs.getInt(2), rs.getBoolean(3), rs.getInt(4), rs.getInt(5)));
@@ -57,20 +61,28 @@ public abstract class CreateSessionControl {
                     }
                 }
             }
-            for (Session s : sessions) {
-                if ((s.getStartTime().getHours() < Integer.valueOf(end) && s.getStartTime().getHours() > Integer.valueOf(start))
-                 || (s.getEndTime().getHours() < Integer.valueOf(end) && s.getEndTime().getHours() > Integer.valueOf(start))
-                 || (s.getStartTime().getHours() <= Integer.valueOf(start) && s.getEndTime().getHours() >= Integer.valueOf(end))){
-                    if (availableStudioRooms.containsKey(s.getStudioID())) {
-                        availableStudioRooms.get(s.getStudioID()).remove(s.getRoomID());
+           for (Session s : sessions) {
+                if ((s.getStartTime() < Integer.valueOf(end) && s.getStartTime() > Integer.valueOf(start))
+                 || (s.getEndTime() < Integer.valueOf(end) && s.getEndTime() > Integer.valueOf(start))
+                 || (s.getStartTime() <= Integer.valueOf(start) && s.getEndTime() >= Integer.valueOf(end))){
+                    for (SessionsRooms sr : sessionsRooms) {
+                        if (s.getSessionID() == sr.getSessionID()) {
+                            if (availableStudioRooms.containsKey(sr.getStudioID())) {
+                                for (Iterator<Integer> iterator = availableStudioRooms.get(sr.getStudioID()).iterator(); iterator.hasNext(); ) {
+                                    Integer value = iterator.next();
+                                    if (value == sr.getRoomNum()) {
+                                        iterator.remove();
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
-            for (Map.Entry<Integer, ArrayList<Integer>> entries : availableStudioRooms.entrySet()) {
-                Integer key = entries.getKey();
-                ArrayList<Integer> value =  entries.getValue();
-                if (value.size() == 0) {
-                    availableStudioRooms.remove(key);
+            for(Iterator<Map.Entry<Integer, ArrayList<Integer>>> it = availableStudioRooms.entrySet().iterator() ; it.hasNext();){
+                Map.Entry<Integer, ArrayList<Integer>> entry = it.next();
+                if (entry.getValue().isEmpty()) {
+                     it.remove();
                 }
             }
         } catch (SQLException ex) {
@@ -162,15 +174,15 @@ public abstract class CreateSessionControl {
         }
         return null;
     }
-    public static boolean newSession(Timestamp sessionDate, String start, String end, String artistID) {
+    public static int newSession(Timestamp sessionDate, String start, String end, String artistID) {
         if (!(ValidatorManager.onlyContainsNumbers(start))){
             JOptionPane.showMessageDialog(null, "The until field must be a number.");
-            return false;
+            return -1;
         }
         
         if (!(ValidatorManager.onlyContainsNumbers(end))){
             JOptionPane.showMessageDialog(null, "The start field must be a number.");
-            return false;
+            return -1;
         }
         Timestamp tstart = new Timestamp(sessionDate.getTime());
         tstart.setHours(Integer.valueOf(start));
@@ -178,11 +190,20 @@ public abstract class CreateSessionControl {
         tend.setHours(Integer.valueOf(end));
         String qry = "INSERT INTO tblSession (SessionDate, startTime, endTime, artistID)\n"
                    + "VALUES('"+sessionDate+"','"+tstart+"','"+tend+"','"+artistID+"')";
+        return DBManager.insert(qry);
+    }
+    public static boolean newSessionLocation(int session, int studio, int room) {
+        String qry = "INSERT INTO tblSessionLocation (SessionNumber, StudioNumber, roomNumber)\n"
+                   + "VALUES('"+session+"','"+studio+"','"+room+"')";
         if (DBManager.insert(qry) == -2) {
-            JOptionPane.showMessageDialog(null,
-                "Session was created successfully!",
-                "Setup complete",
-                JOptionPane.INFORMATION_MESSAGE);
+            return true;
+        }
+        return false;
+    }
+    public static boolean newSoundmanInSession(String soundman, int session, boolean producer, boolean mix, boolean master) {
+        String qry = "INSERT INTO tblSoundManWorkAs (SoundManID, SessionNumber, Producer, MixTech, MasterTech)\n"
+                   + "VALUES('"+soundman+"','"+session+"','"+producer+"','"+mix+"','"+master+"')";
+        if (DBManager.insert(qry) == -2) {
             return true;
         }
         return false;

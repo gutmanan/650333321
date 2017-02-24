@@ -16,6 +16,12 @@ public class Room {
         this.Capacity = capacity;
         this.Price = price;
     }
+    
+    public Room(int StudioID, int RoomNum, boolean RecordingCell) {
+        this.RoomNum = RoomNum;
+        this.StudioID = StudioID;
+        this.RecordingCell = RecordingCell;
+    }
 
     public int getRoomNum() {
         return RoomNum;
@@ -35,6 +41,11 @@ public class Room {
 
     public boolean isRecordingCell() {
         return RecordingCell;
+    }
+
+    @Override
+    public String toString() {
+        return "Room{" + "RoomNum=" + RoomNum + ", StudioID=" + StudioID + ", RecordingCell=" + RecordingCell + '}';
     }
     
     

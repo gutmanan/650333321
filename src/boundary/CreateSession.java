@@ -16,7 +16,9 @@ import entity.SoundMan;
 import businessLogic.SessionsInTheRoom;
 import businessLogic.StudioRatesControl;
 import businessLogic.WindowManager;
+import entity.E_ROLE;
 import entity.RatingBarCell;
+import entity.SoundManInSession;
 import java.awt.Font;
 import java.awt.font.TextAttribute;
 import java.sql.ResultSet;
@@ -40,11 +42,15 @@ import org.jdesktop.swingx.JXDatePicker;
  * @author Shai Gutman
  */
 public class CreateSession extends javax.swing.JPanel {
-        
+        private int selectedStud;
+        private ArrayList<Room> selecRoom;
+        private HashMap<Integer, String> soundmanKey;
     public CreateSession() {
         if (WindowManager.getTmpArtist() == null)
             return;
         initComponents();
+        selecRoom = new ArrayList<Room>();
+        soundmanKey = new HashMap<>();
         for (Map.Entry<String, ArrayList<java.util.Date>> entry : SessionsInTheRoom.getXML().getOccupied().entrySet()) {
             String key = entry.getKey();
             if (key.equals(WindowManager.getTmpArtist().getAlphaCode())) {
@@ -323,8 +329,7 @@ public class CreateSession extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void sessionDatePickerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sessionDatePickerActionPerformed
-        //jXDatePicker1.setEditable(false);
-        
+        //sessionDatePicker.setEditable(false);
     }//GEN-LAST:event_sessionDatePickerActionPerformed
 
     private void studioComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_studioComboBoxItemStateChanged
@@ -339,6 +344,7 @@ public class CreateSession extends javax.swing.JPanel {
         if (studioComboBox.getSelectedItem() == null || studioComboBox.getSelectedIndex() == 0) {
             return;
         }
+        selectedStud = Integer.valueOf(String.valueOf(studioComboBox.getSelectedItem()));
         roomsLabel.setVisible(true);
         soundmansLabel.setVisible(true);
         jScrollPane1.setVisible(true);
@@ -454,12 +460,14 @@ public class CreateSession extends javax.swing.JPanel {
             if (CreateSessionControl.getFreelancer(key) != null) {
                 name = CreateSessionControl.getFreelancer(key).getFirst()+" "+CreateSessionControl.getFreelancer(key).getLast();
             }
-            model2.addRow(new Object[]{name,
-                                        value.isProducer()?null:false,
-                                        value.isMixTech()?null:false,
-                                        value.isMasterTech()?null:false,
-                                        value.getTotalPayment(),
-                                        value.getAdvancePay()});
+            model2.addRow(new Object[]{name,value.isProducer()?null:false,
+                                            value.isMixTech()?null:false,
+                                            value.isMasterTech()?null:false,
+                                            value.getTotalPayment(),
+                                            value.getAdvancePay()});
+            if (soundmansTable.getRowCount()-1 >= 0) {
+                soundmanKey.put(soundmansTable.getRowCount()-1, key);
+            }
         }
     }//GEN-LAST:event_studioComboBoxActionPerformed
 
@@ -506,7 +514,7 @@ public class CreateSession extends javax.swing.JPanel {
         TableColumn tc2 = jTable3.getColumnModel().getColumn(5);
         tc2.setCellEditor(new DefaultCellEditor(new JComboBox<String>(rooms.toArray(new String[rooms.size()]))));
         TableColumn tc3 = jTable3.getColumnModel().getColumn(3);
-        int selectedStud = Integer.valueOf(String.valueOf(studioComboBox.getSelectedItem()));
+        selectedStud = Integer.valueOf(String.valueOf(studioComboBox.getSelectedItem()));
         HashMap<String, Musician> availableMusicition = CreateSessionControl.getAvailableMusicition(selectedDate, startTextField.getText(), endTextField.getText(),selectedStud);
         for (Map.Entry<String, Musician> entries : availableMusicition.entrySet()) {
             String key = entries.getKey();
@@ -553,12 +561,66 @@ public class CreateSession extends javax.swing.JPanel {
     }//GEN-LAST:event_clickLabelMouseClicked
 
     private void createButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createButtonActionPerformed
-        if (CreateSessionControl.newSession(new Timestamp(sessionDatePicker.getDate().getTime()), startTextField.getText(), endTextField.getText(), WindowManager.getTmpArtist().getAlphaCode())) {
-            System.out.println("boundary.CreateSession.createButtonActionPerformed()");
+        int generated = CreateSessionControl.newSession(new Timestamp(sessionDatePicker.getDate().getTime()), startTextField.getText(), endTextField.getText(), WindowManager.getTmpArtist().getAlphaCode());
+        int counter = 0;
+        for (Room room : selecRoom) {
+            if (generated > 0 && CreateSessionControl.newSessionLocation(generated, selectedStud, room.getRoomNum())) {
+                counter++;
+            }
+        }
+        for (int i = 0; i < soundmansTable.getRowCount(); i++) {
+            CreateSessionControl.newSoundmanInSession(soundmanKey.get(i), generated, 
+                        (boolean)soundmansTable.getValueAt(i, 1),
+                        (boolean)soundmansTable.getValueAt(i, 2),
+                        (boolean)soundmansTable.getValueAt(i, 3));
+        }
+        if (counter == selecRoom.size()) {
+            JOptionPane.showMessageDialog(null,
+                "Session was created successfully!",
+                "Setup complete",
+                JOptionPane.INFORMATION_MESSAGE);
+            return;
         }
     }//GEN-LAST:event_createButtonActionPerformed
 
-
+    public boolean confirmRooms() {
+        boolean flag = false;
+        for (int i = 0; i < roomsTable.getRowCount(); i++) {
+            if ((Boolean)roomsTable.getValueAt(i, 2)) {
+                selecRoom.add(new Room(selectedStud, (Integer)roomsTable.getValueAt(i, 0), (Boolean)roomsTable.getValueAt(i, 1)));
+            }
+        }     
+        for (Room room : selecRoom) {
+            if (room.isRecordingCell()) {
+                flag = true;
+            }
+        }
+        if (!flag) {
+            JOptionPane.showMessageDialog(null,
+                "You must select at least one room with recording cell!",
+                "Input error",
+                JOptionPane.INFORMATION_MESSAGE);
+            return false;
+        }
+        return flag;
+    } 
+    
+    public boolean confirmSoundmans() {
+        int anotherCounter = 0;
+        for (int i = 0; i < soundmansTable.getRowCount(); i++) {
+            if (!(!(boolean)soundmansTable.getValueAt(i, 1) && !(boolean)soundmansTable.getValueAt(i, 2)&&!(boolean)soundmansTable.getValueAt(i, 3))) {
+                anotherCounter++;
+            }
+        }
+        if (anotherCounter < 1) {
+            JOptionPane.showMessageDialog(null,
+                "You must select at least one soundman!",
+                "Input error",
+                JOptionPane.INFORMATION_MESSAGE);
+            return false;
+        }
+        return true;
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel availstudiosLabel;
     private javax.swing.JLabel clickLabel;

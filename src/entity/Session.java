@@ -6,16 +6,12 @@ import java.sql.*;
 public class Session {
     
     private int SessionID;
-    private Date SessionDate;
-    private Time StartTime;
-    private Time EndTime;
+    private Timestamp SessionDate;
+    private int StartTime;
+    private int EndTime;
     private String ArtistAlphaCode;
-    private int studioID;
-    private int roomID;
 
-    public Session(int studioID,int roomID, int SessionID, Date SessionDate, Time StartTime, Time EndTime) {
-        this.studioID = studioID;
-        this.roomID = roomID;
+    public Session(int SessionID, Timestamp SessionDate, int StartTime, int EndTime) {
         this.SessionID = SessionID;
         this.SessionDate = SessionDate;
         this.StartTime = StartTime;
@@ -30,24 +26,18 @@ public class Session {
         return ArtistAlphaCode;
     }
 
-    public int getStudioID() {
-        return studioID;
+    public Timestamp getSessionDate() {
+        return SessionDate;
     }
 
-    public int getRoomID() {
-        return roomID;
-    }
-
-    public Time getStartTime() {
+    public int getStartTime() {
         return StartTime;
     }
 
-    public Time getEndTime() {
+    public int getEndTime() {
         return EndTime;
     }
-
-    public Date getSessionDate() {
-        return SessionDate;
-    }
+    
+    
     
 }
