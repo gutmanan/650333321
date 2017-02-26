@@ -1,6 +1,7 @@
 
 package businessLogic;
 
+import entity.Artist;
 import java.io.*;
 import java.sql.*;
 import java.text.DateFormat;
@@ -24,11 +25,14 @@ public class XMLManager {
     private static Element rootElement = null;
     private static String fileName;
     private static HashMap<String, ArrayList<java.util.Date>> occupied;
+    private static ArrayList<Artist> importedArtists;
         
     public XMLManager(String fileName) {
         this.fileName = fileName;
+        this.occupied = new HashMap<String, ArrayList<java.util.Date>>();
+        this.importedArtists = new ArrayList<>();
     }
-  public void importXML() {
+    public void importXML() {
         try {
             File file = new File(fileName+".xml");
             DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -56,36 +60,49 @@ public class XMLManager {
             }
             Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        String pulqry = null;
+        String insqry = null;
+        for (Artist importedArtist : importedArtists) {
+            pulqry = "SELECT tblArtist.ArtistID\n"
+                   + "FROM tblArtist\n"
+                   + "WHERE tblArtist.ArtistID=\""+importedArtist.getAlphaCode()+"\"";
+            insqry = "INSERT INTO tblArtist (ArtistID, stageName, eMail, password)"
+                   + "VALUES('"+importedArtist.getAlphaCode()+"','"+importedArtist.getStageName()+"','"+importedArtist.getEmail()+"','"+importedArtist.getPassword()+"')";
+            ResultSet rs = DBManager.query(pulqry);
+            try {
+                if (!rs.isBeforeFirst()) {
+                    DBManager.insert(insqry);
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
-
-
-  private static void printNote(NodeList nodeList) {
-    occupied = new HashMap<String, ArrayList<java.util.Date>>();
+    private static void printNote(NodeList nodeList) {
     for (int count = 0; count < nodeList.getLength(); count++) {
 	Node tempNode = nodeList.item(count);
 	if (tempNode.getNodeType() == Node.ELEMENT_NODE) {
-		if (tempNode.hasAttributes()) {
-			NamedNodeMap nodeMap = tempNode.getAttributes();
-			for (int i = 0; i < nodeMap.getLength(); i++) {
-                            Node node = nodeMap.item(i);
-                            String string = node.getNodeValue();
-                            String[] parts = string.split(",");
-                            String part1 = parts[0]; // artist
-                            String part2 = parts[1]; // date
-                            if (!occupied.containsKey(part1)) {
-                                occupied.put(part1, new ArrayList<java.util.Date>());
-                                occupied.get(part1).add(new java.util.Date(Long.valueOf(part2)));
-                            } else occupied.get(part1).add(new java.util.Date(Long.valueOf(part2)));
-			}
-		}
-		if (tempNode.hasChildNodes()) {
-			printNote(tempNode.getChildNodes());
-		}
+            if (tempNode.hasAttributes()) {
+                    NamedNodeMap nodeMap = tempNode.getAttributes();
+                    for (int i = 0; i < nodeMap.getLength(); i++) {
+                        Node node = nodeMap.item(i);
+                        String string = node.getNodeValue();
+                        String lastArtist = null;
+                        if (!occupied.containsKey(string) && ValidatorManager.isAlphaCode(string)) {
+                            String[] s = tempNode.getTextContent().split("\n");
+                            importedArtists.add(new Artist(string, s[1].substring(4), s[2].substring(4)));
+                            occupied.put(string, new ArrayList<java.util.Date>());
+                            lastArtist = string;
+                        } else if (lastArtist != null)
+                                occupied.get(lastArtist).add(new java.util.Date(Long.valueOf(string)));
+                    }
+            }
+            if (tempNode.hasChildNodes()) {
+                printNote(tempNode.getChildNodes());
+            }
 	}
     }
   }
-    
     public void create(String title) {
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -97,25 +114,47 @@ public class XMLManager {
             Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    public void write(ResultSet rs) {
+    public static HashMap<String, ArrayList<java.util.Date>> getOccupied() {
+        return occupied;
+    }
+    public static void write(ResultSet rs, HashMap<String, ArrayList<Timestamp>> artistSessions) {
         try {
             while (rs.next()) {
-                Element show = doc.createElement("Artist");
-                Attr attr = doc.createAttribute("ID");
-                attr.setValue(rs.getString(1));
-                show.setAttributeNode(attr);
-                
-                Element el = doc.createElement("ShowDate");
-                el.appendChild(doc.createTextNode(rs.getString(2)));
-                show.appendChild(el);
-                
-                rootElement.appendChild(show);
+                // append child elements to root element
+                rootElement.appendChild(getArtist(doc, rs.getString(1), rs.getString(2), rs.getString(3)));
+            }
+            NodeList nl = rootElement.getChildNodes();
+            for (int i = 0; i < nl.getLength(); i++) {
+                NamedNodeMap nnm = nl.item(i).getAttributes();
+                String artist = nnm.item(0).getNodeValue();
+                if (artistSessions.containsKey(artist)) {
+                    for (Timestamp date : artistSessions.get(artist)) {
+                        nl.item(i).appendChild(getSession(doc, date));
+                    }
+                }
             }
         } catch (SQLException ex) {
             Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    public void export() {
+    private static Node getArtist(Document doc, String id, String stageName, String email) {
+        Element artist = doc.createElement("Artist");
+        artist.setAttribute("id", id);
+        artist.appendChild(getArtistElements(doc, artist, "stageName", stageName));
+        artist.appendChild(getArtistElements(doc, artist, "email", email));
+        return artist;
+    }
+    private static Node getSession(Document doc, Timestamp date) {
+        Element session = doc.createElement("Session");
+        session.setAttribute("date", String.valueOf(date));
+        return session;
+    }
+    private static Node getArtistElements(Document doc, Element element, String name, String value) {
+        Element node = doc.createElement(name);
+        node.appendChild(doc.createTextNode(value));
+        return node;
+    }
+    public static void export(String fileName) {
         try {
             TransformerFactory factory = TransformerFactory.newInstance();
             factory.setAttribute("indent-number", 2);
@@ -125,14 +164,10 @@ public class XMLManager {
             DOMSource source = new DOMSource(doc);
             StreamResult result = new StreamResult(new File(fileName+".xml"));
             transformer.transform(source, result);
+            DebugManager.setXMLStatus(true);
         } catch (TransformerException  ex) {
+            DebugManager.setXMLStatus(false);
             Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
-    public static HashMap<String, ArrayList<java.util.Date>> getOccupied() {
-        return occupied;
-    }
-    
-    
 }

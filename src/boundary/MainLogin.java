@@ -53,6 +53,20 @@ public class MainLogin extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        newAccountFrame1 = new javax.swing.JInternalFrame();
+        registerButton1 = new javax.swing.JButton();
+        cancelButton1 = new javax.swing.JButton();
+        emailLabel1 = new javax.swing.JLabel();
+        emailField1 = new javax.swing.JTextField();
+        nicknameLabel1 = new javax.swing.JLabel();
+        nicknameField1 = new javax.swing.JTextField();
+        passwordField1 = new javax.swing.JTextField();
+        passwordLabel3 = new javax.swing.JLabel();
+        usernameLabel1 = new javax.swing.JLabel();
+        usernameField1 = new javax.swing.JTextField();
+        helloLabel = new javax.swing.JLabel();
+        hello2Label = new javax.swing.JLabel();
+        internalWallpaper1 = new javax.swing.JLabel();
         newAccountFrame = new javax.swing.JInternalFrame();
         yearBox = new javax.swing.JComboBox<>();
         monthBox = new javax.swing.JComboBox<>();
@@ -92,6 +106,103 @@ public class MainLogin extends javax.swing.JFrame {
         setPreferredSize(new java.awt.Dimension(1205, 725));
         setResizable(false);
         getContentPane().setLayout(null);
+
+        newAccountFrame1.setBorder(null);
+        newAccountFrame1.setTitle("Create new account");
+        newAccountFrame1.setMaximumSize(new java.awt.Dimension(525, 400));
+        newAccountFrame1.setMinimumSize(new java.awt.Dimension(525, 400));
+        newAccountFrame1.setNormalBounds(new java.awt.Rectangle(325, 150, 545, 370));
+        newAccountFrame1.setPreferredSize(new java.awt.Dimension(525, 400));
+        newAccountFrame1.setVisible(false);
+        newAccountFrame1.getContentPane().setLayout(null);
+
+        registerButton1.setText("Register");
+        registerButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                registerButton1ActionPerformed(evt);
+            }
+        });
+        usernameField1.setText(UUID.randomUUID().toString().substring(0, 7));
+        newAccountFrame1.getContentPane().add(registerButton1);
+        registerButton1.setBounds(210, 250, 90, 26);
+
+        cancelButton1.setText("Cancel");
+        cancelButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelButton1ActionPerformed(evt);
+            }
+        });
+        newAccountFrame1.getContentPane().add(cancelButton1);
+        cancelButton1.setBounds(320, 250, 80, 26);
+
+        emailLabel1.setText("Email:");
+        newAccountFrame1.getContentPane().add(emailLabel1);
+        emailLabel1.setBounds(100, 160, 90, 16);
+
+        emailField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                emailField1ActionPerformed(evt);
+            }
+        });
+        newAccountFrame1.getContentPane().add(emailField1);
+        emailField1.setBounds(180, 160, 150, 20);
+
+        nicknameLabel1.setText("Stage Name:");
+        newAccountFrame1.getContentPane().add(nicknameLabel1);
+        nicknameLabel1.setBounds(100, 120, 90, 16);
+
+        nicknameField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nicknameField1ActionPerformed(evt);
+            }
+        });
+        newAccountFrame1.getContentPane().add(nicknameField1);
+        nicknameField1.setBounds(180, 120, 90, 20);
+
+        passwordField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                passwordField1ActionPerformed(evt);
+            }
+        });
+        newAccountFrame1.getContentPane().add(passwordField1);
+        passwordField1.setBounds(180, 190, 150, 20);
+
+        passwordLabel3.setText("Password:");
+        newAccountFrame1.getContentPane().add(passwordLabel3);
+        passwordLabel3.setBounds(100, 190, 90, 16);
+
+        usernameLabel1.setText("UUID:");
+        newAccountFrame1.getContentPane().add(usernameLabel1);
+        usernameLabel1.setBounds(100, 80, 90, 16);
+
+        usernameField1.setEditable(false);
+        usernameField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                usernameField1ActionPerformed(evt);
+            }
+        });
+        usernameField.setText(UUID.randomUUID().toString().substring(0, 7));
+        newAccountFrame1.getContentPane().add(usernameField1);
+        usernameField1.setBounds(180, 80, 120, 20);
+
+        helloLabel.setVisible(false);
+        helloLabel.setForeground(new java.awt.Color(0, 0, 0));
+        helloLabel.setText("please take a moment to set your password.");
+        newAccountFrame1.getContentPane().add(helloLabel);
+        helloLabel.setBounds(100, 40, 310, 20);
+
+        hello2Label.setVisible(false);
+        hello2Label.setForeground(new java.awt.Color(0, 0, 0));
+        hello2Label.setText("Hello!  We have noticed that this is your first time here, ");
+        newAccountFrame1.getContentPane().add(hello2Label);
+        hello2Label.setBounds(100, 20, 310, 20);
+
+        internalWallpaper1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/container2.png"))); // NOI18N
+        newAccountFrame1.getContentPane().add(internalWallpaper1);
+        internalWallpaper1.setBounds(0, 0, 450, 300);
+
+        getContentPane().add(newAccountFrame1);
+        newAccountFrame1.setBounds(375, 200, 450, 300);
 
         newAccountFrame.setBorder(null);
         newAccountFrame.setTitle("Create new account");
@@ -426,8 +537,48 @@ public class MainLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_uploadButtonActionPerformed
 
     private void createUserBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createUserBtn1ActionPerformed
-        // TODO add your handling code here:
+        BasicInternalFrameUI mashu = (BasicInternalFrameUI)newAccountFrame1.getUI();
+        mashu.setNorthPane(null);
+        newAccountFrame1.setBorder(null);
+        newAccountFrame1.setVisible(true);
     }//GEN-LAST:event_createUserBtn1ActionPerformed
+
+    private void registerButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerButton1ActionPerformed
+        String username = usernameField1.getText();
+        String nickname = nicknameField1.getText();
+        String email = emailField1.getText();
+        String password = passwordField1.getText();
+        String qry = "INSERT INTO tblArtist (ArtistID, stageName, eMail, password)"
+        + "VALUES('"+username+"','"+nickname+"','"+email+"','"+password+"')";
+        if (DBManager.insert(qry) == -2) {
+            JOptionPane.showMessageDialog(newAccountFrame,
+                "Congratulations your account was created successfully!",
+                "Account was created",
+                JOptionPane.INFORMATION_MESSAGE);
+            clearUserForm();
+            newAccountFrame.setVisible(false);
+        }
+    }//GEN-LAST:event_registerButton1ActionPerformed
+
+    private void cancelButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButton1ActionPerformed
+        newAccountFrame1.dispose();
+    }//GEN-LAST:event_cancelButton1ActionPerformed
+
+    private void emailField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_emailField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_emailField1ActionPerformed
+
+    private void nicknameField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nicknameField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_nicknameField1ActionPerformed
+
+    private void passwordField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_passwordField1ActionPerformed
+
+    private void usernameField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usernameField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_usernameField1ActionPerformed
 
     public static BufferedImage resize(BufferedImage image, int width, int height) {
         BufferedImage bi = new BufferedImage(width, height, BufferedImage.TRANSLUCENT);
@@ -439,7 +590,8 @@ public class MainLogin extends javax.swing.JFrame {
     }
     
     public void openMain() {
-        if (usernameArea.getText().equals("") || passwordArea.getText().equals("")) {
+        checkNewUser();
+        if (usernameArea.getText().equals("") /*|| passwordArea.getText().equals("")*/) {
             JOptionPane.showMessageDialog(this,
                 "You must enter username & password",
                 "Login error",
@@ -466,7 +618,7 @@ public class MainLogin extends javax.swing.JFrame {
                         this.dispose();
                         WindowManager.startMain();
                         return;
-                    }
+                    } 
                 }
                 while (freelancers.next()) {
                     if (freelancers.getString(8).equals(passwordArea.getText())) {
@@ -510,34 +662,68 @@ public class MainLogin extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel birthdayLabel;
     private javax.swing.JButton cancelButton;
+    private javax.swing.JButton cancelButton1;
     private javax.swing.JButton createUserBtn;
     private javax.swing.JButton createUserBtn1;
     private javax.swing.JComboBox<String> dayBox;
     private javax.swing.JTextField emailField;
+    private javax.swing.JTextField emailField1;
     private javax.swing.JLabel emailLabel;
+    private javax.swing.JLabel emailLabel1;
     private javax.swing.JButton exitButton;
     private javax.swing.JTextField firstnameField;
     private javax.swing.JLabel firstnameLabel;
+    private javax.swing.JLabel hello2Label;
+    private javax.swing.JLabel helloLabel;
     private javax.swing.JLabel internalWallpaper;
+    private javax.swing.JLabel internalWallpaper1;
     private javax.swing.JTextField lastnameField;
     private javax.swing.JLabel lastnameLabel;
     private javax.swing.JButton loginBtn;
     private javax.swing.JComboBox<String> monthBox;
     private javax.swing.JInternalFrame newAccountFrame;
+    private javax.swing.JInternalFrame newAccountFrame1;
     private javax.swing.JTextField nicknameField;
+    private javax.swing.JTextField nicknameField1;
     private javax.swing.JLabel nicknameLabel;
+    private javax.swing.JLabel nicknameLabel1;
     private javax.swing.JTextField passwordArea;
     private javax.swing.JTextField passwordField;
+    private javax.swing.JTextField passwordField1;
     private javax.swing.JLabel passwordLabel;
     private javax.swing.JLabel passwordLabel1;
+    private javax.swing.JLabel passwordLabel3;
     private javax.swing.JTextField profileField;
     private javax.swing.JLabel profileLabel;
     private javax.swing.JButton registerButton;
+    private javax.swing.JButton registerButton1;
     private javax.swing.JButton uploadButton;
     private javax.swing.JTextField usernameArea;
     private javax.swing.JTextField usernameField;
+    private javax.swing.JTextField usernameField1;
     private javax.swing.JLabel usernameLabel;
+    private javax.swing.JLabel usernameLabel1;
     private javax.swing.JLabel wallpaper;
     private javax.swing.JComboBox<String> yearBox;
     // End of variables declaration//GEN-END:variables
+
+    private void checkNewUser() {
+        ResultSet newArtists = SessionsInTheRoom.getDB().query("SELECT tblArtist.*\n" +
+                                                               "FROM tblArtist\n" +
+                                                               "WHERE tblArtist.eMail=\""+usernameArea.getText()+"\"");
+        try {
+            while (newArtists.next()) {
+                if (newArtists.getString(4).equals("null")) {
+                    helloLabel.setVisible(true);
+                    hello2Label.setVisible(true);
+                    newAccountFrame1.setVisible(true);
+                    nicknameField1.setText(newArtists.getString(2));
+                    nicknameField1.setEnabled(false);
+                    emailField1.setText(newArtists.getString(3));
+                    emailField1.setEnabled(false);
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(MainLogin.class.getName()).log(Level.SEVERE, null, ex);
+        }    }
 }

@@ -14,6 +14,12 @@ public class Artist {
         this.Email = Email;
         this.password = password;
     }
+    
+    public Artist(String AlphaCode, String StageName, String Email) {
+        this.AlphaCode = AlphaCode;
+        this.StageName = StageName;
+        this.Email = Email;
+    }
 
     public String getAlphaCode() {
         return AlphaCode;
@@ -22,4 +28,13 @@ public class Artist {
     public String getStageName() {
         return StageName;
     }
+
+    public String getEmail() {
+        return Email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+    
 }

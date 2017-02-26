@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<MuzaMusic_Sessions>
+  <Artist id="123abc">
+    <stageName>Banai</stageName>
+    <email>anb@gmail.com</email>
+    <Session date="2017-02-24 00:00:00.0"/>
+    <Session date="2017-02-25 00:00:00.0"/>
+    <Session date="2017-02-24 00:00:00.0"/>
+    <Session date="2017-02-04 00:00:00.0"/>
+    <Session date="2017-02-25 00:00:00.0"/>
+  </Artist>
+  <Artist id="234bcd">
+    <stageName>Bono</stageName>
+    <email>b@gmail.com</email>
+  </Artist>
+  <Artist id="2eba414">
+    <stageName>wwe</stageName>
+    <email>abceds@gmail.com</email>
+  </Artist>
+  <Artist id="456asd">
+    <stageName>Bon Jovi</stageName>
+    <email>fsd@gmail.com</email>
+  </Artist>
+  <Artist id="486rty">
+    <stageName>Kabab</stageName>
+    <email>dsd@gmail.com</email>
+    <Session date="2017-02-24 00:00:00.0"/>
+  </Artist>
+  <Artist id="4edd098">
+    <stageName>mm</stageName>
+    <email>asd@gmail.com</email>
+  </Artist>
+  <Artist id="506c388">
+    <stageName>Hmimo</stageName>
+    <email>hai@gmail.cpm</email>
+  </Artist>
+  <Artist id="789qwe">
+    <stageName>Rita</stageName>
+    <email>jwl@gmail.com</email>
+  </Artist>
+</MuzaMusic_Sessions>
