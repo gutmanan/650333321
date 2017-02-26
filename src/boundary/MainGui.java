@@ -183,7 +183,7 @@ public class MainGui extends JFrame {
     }//GEN-LAST:event_arrowButtonActionPerformed
 
     private void genericButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_genericButton2ActionPerformed
-        setWindows(null, new AddRoom(), new AddWorkWithStudio());              
+        setWindows(new AddRecording(), new AddRoom(), new AddWorkWithStudio());              
     }//GEN-LAST:event_genericButton2ActionPerformed
 
     private void genericButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_genericButton3ActionPerformed

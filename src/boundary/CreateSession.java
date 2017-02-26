@@ -476,68 +476,10 @@ public class CreateSession extends javax.swing.JPanel {
     }//GEN-LAST:event_roomsTablePropertyChange
 
     private void inviteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inviteButtonActionPerformed
-        if (sessionDatePicker.getDate() == null) {
+        if (sessionDatePicker.getDate() == null || !confirmRooms() || !confirmSoundmans()) {
             return;
         }
-        ArrayList<String> rooms = new ArrayList();
-        for (int i = 0; i < roomsTable.getRowCount(); i++) {
-            if ((Boolean)roomsTable.getValueAt(i, 2)) {
-                    rooms.add(String.valueOf(roomsTable.getValueAt(i, 0)));
-            }
-        }
-        jPanel1.setVisible(true);
-        jPanel1.setBounds(40, 390, 700, 170);
-        Date selectedDate = new Date(sessionDatePicker.getDate().getTime());
-        DefaultTableModel model = new DefaultTableModel() {
-            public boolean isCellEditable(int row, int col) {
-                 switch (col) {
-                     case 4:
-                         return true;
-                     case 5:
-                         return true;
-                     default:
-                         return false;
-                  }
-            }
-        };
-        jTable3.setModel(model);
-        model.addColumn("Name"); 
-        model.addColumn("Specialization");
-        model.addColumn("Wage"); 
-        model.addColumn("Rank"); 
-        model.addColumn("Invite");
-        model.addColumn("Room"); 
-        jTable3.setRowHeight(30);
-        TableColumn tc = jTable3.getColumnModel().getColumn(4);
-        tc.setCellEditor(jTable3.getDefaultEditor(Boolean.class));
-        tc.setCellRenderer(jTable3.getDefaultRenderer(Boolean.class));
-        TableColumn tc2 = jTable3.getColumnModel().getColumn(5);
-        tc2.setCellEditor(new DefaultCellEditor(new JComboBox<String>(rooms.toArray(new String[rooms.size()]))));
-        TableColumn tc3 = jTable3.getColumnModel().getColumn(3);
-        selectedStud = Integer.valueOf(String.valueOf(studioComboBox.getSelectedItem()));
-        HashMap<String, Musician> availableMusicition = CreateSessionControl.getAvailableMusicition(selectedDate, startTextField.getText(), endTextField.getText(),selectedStud);
-        for (Map.Entry<String, Musician> entries : availableMusicition.entrySet()) {
-            String key = entries.getKey();
-            Musician value =  entries.getValue();
-            RatingBarCell rbc = new RatingBarCell();
-            tc3.setCellEditor(rbc);
-            tc3.setCellRenderer(rbc);
-            rbc.getCellEditorValue().setRate(StudioRatesControl.getRankOf(selectedStud, key));
-            String name = CreateSessionControl.getFreelancer(key).getFirst()+" "+CreateSessionControl.getFreelancer(key).getLast();
-            model.addRow(new Object[]{name,value.getType(),value.getCommission(),rbc.getCellEditorValue(),false,"Select Room"});
-        }
-        jTable3.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                if (jTable3.getSelectedRow() > -1) {
-                    if (jTable3.getSelectedColumn() == 5 && !((Boolean)(jTable3.getValueAt(jTable3.getSelectedRow(), 4)))) {
-                        JOptionPane.showMessageDialog(null, "Please invite the musician first", "Input Warning", JOptionPane.WARNING_MESSAGE);
-                        jTable3.setValueAt("Select Room",jTable3.getSelectedRow(), 5);
-                        return;
-                    }
-                }       
-            }
-        });
+        setInvitePanel();
     }//GEN-LAST:event_inviteButtonActionPerformed
 
     private void clickLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_clickLabelMouseClicked
@@ -608,7 +550,12 @@ public class CreateSession extends javax.swing.JPanel {
     public boolean confirmSoundmans() {
         int anotherCounter = 0;
         for (int i = 0; i < soundmansTable.getRowCount(); i++) {
-            if (!(!(boolean)soundmansTable.getValueAt(i, 1) && !(boolean)soundmansTable.getValueAt(i, 2)&&!(boolean)soundmansTable.getValueAt(i, 3))) {
+            if ((soundmansTable.getValueAt(i, 1) == null  || !(boolean)soundmansTable.getValueAt(i, 1)) && 
+                (soundmansTable.getValueAt(i, 2) == null  || !(boolean)soundmansTable.getValueAt(i, 2)) && 
+                (soundmansTable.getValueAt(i, 3) == null  || !(boolean)soundmansTable.getValueAt(i, 3))) {
+                continue;
+            }
+            if (!(!(boolean)soundmansTable.getValueAt(i, 1) && !(boolean)soundmansTable.getValueAt(i, 2)&& !(boolean)soundmansTable.getValueAt(i, 3))) {
                 anotherCounter++;
             }
         }
@@ -620,6 +567,67 @@ public class CreateSession extends javax.swing.JPanel {
             return false;
         }
         return true;
+    }
+    
+    public void setInvitePanel() {
+        ArrayList<Integer> rooms = new ArrayList();
+        for (int i = 0; i < roomsTable.getRowCount(); i++) {
+            if ((Boolean)roomsTable.getValueAt(i, 2)) {
+                    rooms.add((Integer)roomsTable.getValueAt(i, 0));
+            }
+        }
+        jPanel1.setVisible(true);
+        jPanel1.setBounds(40, 390, 700, 170);
+        Date selectedDate = new Date(sessionDatePicker.getDate().getTime());
+        final DefaultTableModel model = new DefaultTableModel() {
+            public boolean isCellEditable(int row, int col) {
+                 switch (col) {
+                     case 4:
+                         return true;
+                     case 5:
+                         return true;
+                     default:
+                         return false;
+                  }
+            }
+        };
+        jTable3.setModel(model);
+        model.addColumn("Name"); 
+        model.addColumn("Specialization");
+        model.addColumn("Wage"); 
+        model.addColumn("Rank"); 
+        model.addColumn("Invite");
+        model.addColumn("Room"); 
+        jTable3.setRowHeight(30);
+        TableColumn tc = jTable3.getColumnModel().getColumn(4);
+        tc.setCellEditor(jTable3.getDefaultEditor(Boolean.class));
+        tc.setCellRenderer(jTable3.getDefaultRenderer(Boolean.class));
+        TableColumn tc2 = jTable3.getColumnModel().getColumn(5);
+        tc2.setCellEditor(new DefaultCellEditor(new JComboBox<Integer>(rooms.toArray(new Integer[rooms.size()]))));
+        TableColumn tc3 = jTable3.getColumnModel().getColumn(3);
+        selectedStud = Integer.valueOf(String.valueOf(studioComboBox.getSelectedItem()));
+        HashMap<String, Musician> availableMusicition = CreateSessionControl.getAvailableMusicition(selectedDate, startTextField.getText(), endTextField.getText(),selectedStud);
+        for (Map.Entry<String, Musician> entries : availableMusicition.entrySet()) {
+            String key = entries.getKey();
+            Musician value =  entries.getValue();
+            RatingBarCell rbc = new RatingBarCell();
+            tc3.setCellEditor(rbc);
+            tc3.setCellRenderer(rbc);
+            rbc.getCellEditorValue().setRate(StudioRatesControl.getRankOf(selectedStud, key));
+            String name = CreateSessionControl.getFreelancer(key).getFirst()+" "+CreateSessionControl.getFreelancer(key).getLast();
+            model.addRow(new Object[]{name,value.getType(),value.getCommission(),rbc.getCellEditorValue(),false,"Select Room"});
+        }
+        jTable3.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (jTable3.getSelectedRow() > -1) {
+                    if (jTable3.getSelectedColumn() == 5 && !((Boolean)(jTable3.getValueAt(jTable3.getSelectedRow(), 4)))) {
+                        JOptionPane.showMessageDialog(null, "Please invite the musician first", "Input Warning", JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
+                }       
+            }
+        });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel availstudiosLabel;

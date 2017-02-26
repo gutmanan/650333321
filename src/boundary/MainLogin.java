@@ -81,6 +81,7 @@ public class MainLogin extends javax.swing.JFrame {
         usernameArea = new javax.swing.JTextField();
         passwordArea = new javax.swing.JTextField();
         loginBtn = new javax.swing.JButton();
+        createUserBtn1 = new javax.swing.JButton();
         createUserBtn = new javax.swing.JButton();
         wallpaper = new javax.swing.JLabel();
 
@@ -293,8 +294,22 @@ public class MainLogin extends javax.swing.JFrame {
         getContentPane().add(loginBtn);
         loginBtn.setBounds(213, 440, 310, 40);
 
+        createUserBtn1.setForeground(new java.awt.Color(51, 51, 51));
+        createUserBtn1.setText("Sign up as an artist");
+        createUserBtn1.setBorder(null);
+        createUserBtn1.setBorderPainted(false);
+        createUserBtn1.setContentAreaFilled(false);
+        createUserBtn1.setFocusPainted(false);
+        createUserBtn1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                createUserBtn1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(createUserBtn1);
+        createUserBtn1.setBounds(370, 500, 160, 16);
+
         createUserBtn.setForeground(new java.awt.Color(51, 51, 51));
-        createUserBtn.setText("Create new account");
+        createUserBtn.setText("Sign up as a freelancer");
         createUserBtn.setBorder(null);
         createUserBtn.setBorderPainted(false);
         createUserBtn.setContentAreaFilled(false);
@@ -305,7 +320,7 @@ public class MainLogin extends javax.swing.JFrame {
             }
         });
         getContentPane().add(createUserBtn);
-        createUserBtn.setBounds(200, 500, 140, 16);
+        createUserBtn.setBounds(200, 500, 160, 16);
 
         wallpaper.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/SessionLogin.png"))); // NOI18N
         getContentPane().add(wallpaper);
@@ -410,6 +425,10 @@ public class MainLogin extends javax.swing.JFrame {
         profileLabel.setIcon(new ImageIcon(resize(image,139,131)));
     }//GEN-LAST:event_uploadButtonActionPerformed
 
+    private void createUserBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createUserBtn1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_createUserBtn1ActionPerformed
+
     public static BufferedImage resize(BufferedImage image, int width, int height) {
         BufferedImage bi = new BufferedImage(width, height, BufferedImage.TRANSLUCENT);
         Graphics2D g2d = (Graphics2D) bi.createGraphics();
@@ -492,6 +511,7 @@ public class MainLogin extends javax.swing.JFrame {
     private javax.swing.JLabel birthdayLabel;
     private javax.swing.JButton cancelButton;
     private javax.swing.JButton createUserBtn;
+    private javax.swing.JButton createUserBtn1;
     private javax.swing.JComboBox<String> dayBox;
     private javax.swing.JTextField emailField;
     private javax.swing.JLabel emailLabel;
