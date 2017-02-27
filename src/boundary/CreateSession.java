@@ -45,12 +45,14 @@ public class CreateSession extends javax.swing.JPanel {
         private int selectedStud;
         private ArrayList<Room> selecRoom;
         private HashMap<Integer, String> soundmanKey;
+        private HashMap<Integer, String> musicanKey;
     public CreateSession() {
         if (WindowManager.getTmpArtist() == null)
             return;
         initComponents();
         selecRoom = new ArrayList<Room>();
         soundmanKey = new HashMap<>();
+        musicanKey = new HashMap<>();
         for (Map.Entry<String, ArrayList<java.util.Date>> entry : SessionsInTheRoom.getXML().getOccupied().entrySet()) {
             String key = entry.getKey();
             if (key.equals(WindowManager.getTmpArtist().getAlphaCode())) {
@@ -510,13 +512,16 @@ public class CreateSession extends javax.swing.JPanel {
                 counter++;
             }
         }
+        Boolean b1;
+        Boolean b2;
+        Boolean b3;
         for (int i = 0; i < soundmansTable.getRowCount(); i++) {
-            CreateSessionControl.newSoundmanInSession(soundmanKey.get(i), generated, 
-                        (boolean)soundmansTable.getValueAt(i, 1),
-                        (boolean)soundmansTable.getValueAt(i, 2),
-                        (boolean)soundmansTable.getValueAt(i, 3));
+            b1 = (Boolean)soundmansTable.getValueAt(i, 1) == null?false:(boolean)soundmansTable.getValueAt(i, 1);
+            b2 = (Boolean)soundmansTable.getValueAt(i, 2) == null?false:(boolean)soundmansTable.getValueAt(i, 2);
+            b3 = (Boolean)soundmansTable.getValueAt(i, 3) == null?false:(boolean)soundmansTable.getValueAt(i, 3);  
+            CreateSessionControl.newSoundmanInSession(soundmanKey.get(i), generated, b1, b2, b3);
         }
-        if (counter == selecRoom.size()) {
+        if (counter == selecRoom.size() && confirmMusicians(generated)) {
             JOptionPane.showMessageDialog(null,
                 "Session was created successfully!",
                 "Setup complete",
@@ -562,6 +567,31 @@ public class CreateSession extends javax.swing.JPanel {
         if (anotherCounter < 1) {
             JOptionPane.showMessageDialog(null,
                 "You must select at least one soundman!",
+                "Input error",
+                JOptionPane.INFORMATION_MESSAGE);
+            return false;
+        }
+        return true;
+    }
+    
+    public boolean confirmMusicians(int sessionID) {
+        int counter = 0;
+        int anotherCounter = 0;
+        for (int i = 0; i < jTable3.getRowCount(); i++) {
+            int roomID = Integer.valueOf(String.valueOf(jTable3.getValueAt(i, 5)));
+            if (jTable3.getValueAt(i, 4) == null  || !(boolean)jTable3.getValueAt(i, 4)) {
+                continue;
+            } else { 
+                anotherCounter++; 
+                if (CreateSessionControl.newMusicianInSession(musicanKey.get(i),sessionID, roomID, selectedStud)) {
+                    counter++;
+                }
+            }
+        }
+        
+        if (counter < anotherCounter) {
+            JOptionPane.showMessageDialog(null,
+                "Couldn't invite musicians...",
                 "Input error",
                 JOptionPane.INFORMATION_MESSAGE);
             return false;
@@ -616,6 +646,9 @@ public class CreateSession extends javax.swing.JPanel {
             rbc.getCellEditorValue().setRate(StudioRatesControl.getRankOf(selectedStud, key));
             String name = CreateSessionControl.getFreelancer(key).getFirst()+" "+CreateSessionControl.getFreelancer(key).getLast();
             model.addRow(new Object[]{name,value.getType(),value.getCommission(),rbc.getCellEditorValue(),false,"Select Room"});
+            if (jTable3.getRowCount()-1 >= 0) {
+                musicanKey.put(jTable3.getRowCount()-1, key);
+            }
         }
         jTable3.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override

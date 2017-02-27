@@ -34,7 +34,7 @@ import javax.swing.plaf.basic.BasicInternalFrameUI;
  * @author Shai Gutman
  */
 public class MainLogin extends javax.swing.JFrame {
-
+    private boolean flag = false;
     /**
      * Creates new form MainLogin
      */
@@ -479,6 +479,13 @@ public class MainLogin extends javax.swing.JFrame {
         Integer birthDay = Integer.parseInt(String.valueOf(dayBox.getSelectedItem()));
         Date birthdate = new Date(birthYear, birthMonth, birthDay);
         Timestamp ts = new Timestamp(birthdate.getTime());
+        if (firstname.isEmpty() || lastname.isEmpty() || email.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(newAccountFrame,
+                "Please fill all the fields first!",
+                "Input Error",
+                JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         String qry = "INSERT INTO tblFreelancer (FreelancerID, firstName, lastName, birthDate, eMail, stageName, Photo, password)"
         + "VALUES('"+username+"','"+firstname+"','"+lastname+"','"+ts+"',\""+email+"\",'"+nickname+"',\""+profileLabel.getIcon()+"\",'"+password+"')";
         if (DBManager.insert(qry) == -2) {
@@ -486,8 +493,9 @@ public class MainLogin extends javax.swing.JFrame {
                 "Congratulations your account was created successfully!",
                 "Account was created",
                 JOptionPane.INFORMATION_MESSAGE);
-            clearUserForm();
             newAccountFrame.setVisible(false);
+            WindowManager.clean();
+            clearUserForm();
         }
     }//GEN-LAST:event_registerButtonActionPerformed
 
@@ -537,6 +545,11 @@ public class MainLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_uploadButtonActionPerformed
 
     private void createUserBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createUserBtn1ActionPerformed
+        clearUserForm();
+        helloLabel.setVisible(false);
+        hello2Label.setVisible(false);
+        nicknameField1.setEnabled(true);
+        emailField1.setEnabled(true);
         BasicInternalFrameUI mashu = (BasicInternalFrameUI)newAccountFrame1.getUI();
         mashu.setNorthPane(null);
         newAccountFrame1.setBorder(null);
@@ -544,19 +557,41 @@ public class MainLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_createUserBtn1ActionPerformed
 
     private void registerButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerButton1ActionPerformed
+        if (flag) {
+            String qry = "UPDATE tblArtist SET tblArtist.password =\""+passwordField1.getText()+"\"\n" +
+                         "WHERE (((tblArtist.eMail)=\""+emailField1.getText()+"\") AND ((tblArtist.ArtistID)=\""+usernameField1.getText()+"\"))";
+            if (DBManager.insert(qry) == -2) {
+                JOptionPane.showMessageDialog(newAccountFrame1,
+                    "Password was updated successfully!",
+                    "Login setup",
+                    JOptionPane.INFORMATION_MESSAGE);
+                newAccountFrame1.setVisible(false);
+                WindowManager.clean();
+                clearUserForm();
+                return;
+            }
+        }
         String username = usernameField1.getText();
         String nickname = nicknameField1.getText();
         String email = emailField1.getText();
         String password = passwordField1.getText();
+        if (nickname.isEmpty() || email.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(newAccountFrame1,
+                "Please fill all the fields first!",
+                "Input Error",
+                JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         String qry = "INSERT INTO tblArtist (ArtistID, stageName, eMail, password)"
         + "VALUES('"+username+"','"+nickname+"','"+email+"','"+password+"')";
         if (DBManager.insert(qry) == -2) {
-            JOptionPane.showMessageDialog(newAccountFrame,
+            JOptionPane.showMessageDialog(newAccountFrame1,
                 "Congratulations your account was created successfully!",
                 "Account was created",
                 JOptionPane.INFORMATION_MESSAGE);
+            newAccountFrame1.setVisible(false);
+            WindowManager.clean();
             clearUserForm();
-            newAccountFrame.setVisible(false);
         }
     }//GEN-LAST:event_registerButton1ActionPerformed
 
@@ -591,7 +626,7 @@ public class MainLogin extends javax.swing.JFrame {
     
     public void openMain() {
         checkNewUser();
-        if (usernameArea.getText().equals("") /*|| passwordArea.getText().equals("")*/) {
+        if (usernameArea.getText().equals("")) {
             JOptionPane.showMessageDialog(this,
                 "You must enter username & password",
                 "Login error",
@@ -633,10 +668,12 @@ public class MainLogin extends javax.swing.JFrame {
                 Logger.getLogger(MainLogin.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        JOptionPane.showMessageDialog(this,
+        if (!flag) {
+            JOptionPane.showMessageDialog(this,
                 "Incorrect username or password",
                 "Login error",
                 JOptionPane.ERROR_MESSAGE);
+        }
     }
     
     public void extLogin(String username, String password) {
@@ -649,6 +686,7 @@ public class MainLogin extends javax.swing.JFrame {
     
     private void clearUserForm() {
         usernameField.setText("");
+        usernameField.setText(UUID.randomUUID().toString().substring(0, 7));
         nicknameField.setText("");
         firstnameField.setText("");
         lastnameField.setText("");
@@ -657,6 +695,11 @@ public class MainLogin extends javax.swing.JFrame {
         yearBox.setSelectedIndex(0);
         monthBox.setSelectedIndex(0);
         dayBox.setSelectedIndex(0);
+        usernameField1.setText("");
+        usernameField1.setText(UUID.randomUUID().toString().substring(0, 7));
+        nicknameField1.setText("");
+        emailField1.setText("");
+        passwordField1.setText("");
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -716,14 +759,20 @@ public class MainLogin extends javax.swing.JFrame {
                 if (newArtists.getString(4).equals("null")) {
                     helloLabel.setVisible(true);
                     hello2Label.setVisible(true);
-                    newAccountFrame1.setVisible(true);
+                    usernameField1.setText(newArtists.getString(1));
                     nicknameField1.setText(newArtists.getString(2));
                     nicknameField1.setEnabled(false);
                     emailField1.setText(newArtists.getString(3));
                     emailField1.setEnabled(false);
+                    BasicInternalFrameUI mashu = (BasicInternalFrameUI)newAccountFrame1.getUI();
+                    mashu.setNorthPane(null);
+                    newAccountFrame1.setBorder(null);
+                    newAccountFrame1.setVisible(true);
+                    flag = true;
                 }
             }
         } catch (SQLException ex) {
             Logger.getLogger(MainLogin.class.getName()).log(Level.SEVERE, null, ex);
-        }    }
+        }    
+    }
 }

@@ -5,12 +5,16 @@ public class SoundManInSession {
     
     private int SessionID;
     private String SoundManID;
-    private E_ROLE Role;
+    private boolean Producer;
+    private boolean MixTech;
+    private boolean MasterTech;
 
-    public SoundManInSession(String SoundManID, int SessionID, E_ROLE Role) {
+    public SoundManInSession(String SoundManID, int SessionID, boolean Producer, boolean MixTech, boolean MasterTech) {
         this.SessionID = SessionID;
         this.SoundManID = SoundManID;
-        this.Role = Role;
+        this.Producer = Producer;
+        this.MixTech = MixTech;
+        this.MasterTech = MasterTech;
     }
 
     public int getSessionID() {
@@ -21,8 +25,16 @@ public class SoundManInSession {
         return SoundManID;
     }
 
-    public E_ROLE getRole() {
-        return Role;
+    public boolean isProducer() {
+        return Producer;
+    }
+
+    public boolean isMixTech() {
+        return MixTech;
+    }
+
+    public boolean isMasterTech() {
+        return MasterTech;
     }
     
 }

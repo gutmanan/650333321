@@ -208,4 +208,12 @@ public abstract class CreateSessionControl {
         }
         return false;
     }
+    public static boolean newMusicianInSession(String musicianId, Integer sessionID, Integer roomID, Integer studioID) {
+        String qry = "INSERT INTO tblMusicianInSession (MusicianID, SessionNum, RoomNumber, studioNumber)\n"
+                   + "VALUES('"+musicianId+"','"+sessionID+"','"+roomID+"','"+studioID+"')";
+        if (DBManager.insert(qry) == -2) {
+            return true;
+        }
+        return false;
+    }
 }

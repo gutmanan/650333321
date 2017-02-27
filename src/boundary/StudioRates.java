@@ -129,20 +129,18 @@ public class StudioRates extends javax.swing.JPanel {
         updateButton.setBounds(570, 510, 140, 26);
 
         jScrollPane2.setBorder(null);
+        jScrollPane2.setForeground(new java.awt.Color(0, 0, 0));
         jScrollPane2.setOpaque(false);
         jScrollPane2.setBorder(null);
         jScrollPane2.getViewport().setOpaque(false);
         jScrollPane2.getViewport().setBorder(null);
 
-        jTable1.setGridColor(new java.awt.Color(255, 255, 255));
+        jTable1.setForeground(new java.awt.Color(0, 0, 0));
+        jTable1.setGridColor(new java.awt.Color(51, 51, 51));
         jTable1.setOpaque(false);
-        jTable1.setShowHorizontalLines(false);
-        jTable1.setShowVerticalLines(false);
+        jTable1.setSurrendersFocusOnKeystroke(true);
         jTable1.getTableHeader().setResizingAllowed(false);
         jTable1.getTableHeader().setReorderingAllowed(false);
-        jTable1.setBorder(null);
-        jTable1.getTableHeader().setOpaque(false);
-        jTable1.getTableHeader().setBorder(null);
         jScrollPane2.setViewportView(jTable1);
 
         add(jScrollPane2);
@@ -241,17 +239,16 @@ public void setTable(int selectedStudio){
     model.addColumn("ID"); 
     model.addColumn("Frist name"); 
     model.addColumn("Last name");
-    model.addColumn("Productivity");
     model.addColumn("Rating");
     jTable1.setRowHeight(30);
-    TableColumn tc = jTable1.getColumnModel().getColumn(4);
+    TableColumn tc = jTable1.getColumnModel().getColumn(3);
     model.setRowCount(0);
     for (Freelancer f : StudioRatesControl.getFreelancersWorkingWith(selectedStudio)) {
         RatingBarCell rbc = new RatingBarCell();
         tc.setCellEditor(rbc);
         tc.setCellRenderer(rbc);
         rbc.getCellEditorValue().setRate(hm.get(f.getFreelancerID()).getRating());
-        model.addRow(new Object[]{f.getFreelancerID(),f.getFirst(), f.getLast(),"50", rbc.getCellEditorValue()});
+        model.addRow(new Object[]{f.getFreelancerID(),f.getFirst(), f.getLast(), rbc.getCellEditorValue()});
         if (jTable1.getRowCount()>0) {
             switches.add(new Switched(selectedStudio, f.getFreelancerID(), 
                     rbc.getCellEditorValue().getRate(), rbc.getCellEditorValue().getRate(),jTable1.getRowCount()-1));
@@ -263,16 +260,16 @@ public void setTable(int selectedStudio){
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 if (jTable1.getSelectedRow() > -1) {
-                    if (((RatingBar)jTable1.getValueAt(jTable1.getSelectedRow(), 4)).getRate() != -1)
+                    if (((RatingBar)jTable1.getValueAt(jTable1.getSelectedRow(), 3)).getRate() != -1)
                         return;
-                    if (jTable1.getSelectedColumn() == 4 ) {
+                    if (jTable1.getSelectedColumn() == 3) {
                         JOptionPane.showMessageDialog(null,updated,"Update Rating", JOptionPane.PLAIN_MESSAGE);
                         for (Switched switche : switches) {
                             if (switche.row == jTable1.getSelectedRow()) {
                                 switche.setTo(updated.getRate());
                             }
                         }
-                        jTable1.setValueAt(updated, jTable1.getSelectedRow(), 4);
+                        jTable1.setValueAt(updated, jTable1.getSelectedRow(), 3);
                         hm.get(String.valueOf(jTable1.getValueAt(jTable1.getSelectedRow(), 0))).setRating(updated.getRate());
                         setTable(hm.get(String.valueOf(jTable1.getValueAt(jTable1.getSelectedRow(), 0))).getStudioID());
                         return;

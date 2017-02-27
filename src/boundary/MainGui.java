@@ -40,6 +40,7 @@ public class MainGui extends JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        genericButton4 = new javax.swing.JButton();
         genericButton3 = new javax.swing.JButton();
         arrowButton = new javax.swing.JButton();
         userButton = new javax.swing.JButton();
@@ -55,6 +56,18 @@ public class MainGui extends JFrame {
         setPreferredSize(new java.awt.Dimension(1205, 725));
         setResizable(false);
         getContentPane().setLayout(null);
+
+        if (WindowManager.getAuthValue() == 2)
+        genericButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/reportProduceBtn.png"))); // NOI18N
+        genericButton4.setBorderPainted(false);
+        genericButton4.setContentAreaFilled(false);
+        genericButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                genericButton4ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(genericButton4);
+        genericButton4.setBounds(-20, 380, 216, 39);
 
         if (WindowManager.getAuthValue() == 2)
         genericButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/studioRatesBtn.png"))); // NOI18N
@@ -190,6 +203,10 @@ public class MainGui extends JFrame {
         setWindows(null, new StudioRates(), null);
     }//GEN-LAST:event_genericButton3ActionPerformed
 
+    private void genericButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_genericButton4ActionPerformed
+        setWindows(null, new ReportProduce(), null);
+    }//GEN-LAST:event_genericButton4ActionPerformed
+
     private void setWindows(JPanel p1, JPanel p2, JPanel p3) {
         switch (WindowManager.getAuthValue()) {
             case 1:
@@ -212,6 +229,7 @@ public class MainGui extends JFrame {
     private javax.swing.JButton genericButton1;
     private javax.swing.JButton genericButton2;
     private javax.swing.JButton genericButton3;
+    private javax.swing.JButton genericButton4;
     private javax.swing.JButton logoutButton;
     private javax.swing.JButton userButton;
     private javax.swing.JLabel wallpaper;
