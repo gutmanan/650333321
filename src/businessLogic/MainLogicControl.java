@@ -75,6 +75,9 @@ public abstract class MainLogicControl {
             JOptionPane.showMessageDialog(null, "Please fill all the fields first!", "Input Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
+        if (!checkExsist(email)) {
+            return false;
+        }
         if (!ValidatorManager.isAlpha(firstname)) {
             JOptionPane.showMessageDialog(null, "First name must be letters only!", "Input Error", JOptionPane.ERROR_MESSAGE);
             return false;
@@ -103,6 +106,9 @@ public abstract class MainLogicControl {
             JOptionPane.showMessageDialog(null, "Please fill all the fields first!", "Input Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
+        if (!checkExsist(email)) {
+            return false;
+        }
         if (flag) {
             String qry = "UPDATE tblArtist SET tblArtist.password =\""+password+"\"\n" +
                          "WHERE (((tblArtist.eMail)=\""+email+"\") AND ((tblArtist.ArtistID)=\""+username+"\"))";
@@ -128,5 +134,29 @@ public abstract class MainLogicControl {
             return true;
         }
         return false;
+    }
+    
+    public static boolean checkExsist(String email){
+        try {
+            String sql = "SELECT tblArtist.eMail\n" +
+                         "FROM tblArtist\n" +
+                         "WHERE (((tblArtist.eMail) Like \""+email+"\"))";
+            ResultSet rs = SessionsInTheRoom.getDB().query(sql);
+            if (rs != null && rs.next()){
+                JOptionPane.showMessageDialog(null, "The email is already exsist");
+                return false;
+            }
+            String sql2 = "SELECT tblFreelancer.eMail\n" +
+                         "FROM tblFreelancer\n" +
+                         "WHERE (((tblFreelancer.eMail) Like \""+email+"\"))";
+            ResultSet rs2 = SessionsInTheRoom.getDB().query(sql);
+            if (rs2 != null && rs2.next()){
+                JOptionPane.showMessageDialog(null, "The email is already exsist");
+                return false;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(SessionsInTheRoom.class.getName()).log(Level.SEVERE, null, ex);
+        }        
+        return true;    
     }
 }
