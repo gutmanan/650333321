@@ -5,6 +5,7 @@
  */
 package businessLogic;
 
+import com.sun.org.apache.xerces.internal.impl.validation.ValidationManager;
 import entity.Studio;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,8 +21,8 @@ import javax.swing.JOptionPane;
 public abstract class CreateStudioControl {
     
     public CreateStudioControl() {}
-    public static boolean insertNewStudio(String name, String description, String email, String phone, String address) {
-        if (!(ValidatorManager.isAlpha(name))){
+    public static boolean insertNewStudio(String name, String description, String email, String phone, String street, String house, String city) {
+        if (!(ValidatorManager.isAlpha(name)) || name.isEmpty()){
             JOptionPane.showMessageDialog(null, "The name field must contain only letters.");
             return false;
         }
@@ -30,6 +31,16 @@ public abstract class CreateStudioControl {
             JOptionPane.showMessageDialog(null, "The Email field is incorrect. \n Example : abc@def.com");
             return false;
         }
+        if (!(ValidatorManager.onlyContainsNumbers(phone))){
+            JOptionPane.showMessageDialog(null, "The phone field must contain numbers.");
+            return false;
+        }
+        
+        String address;
+        if (city.equals("Select City") || street.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please provide a valid address.");
+            return false;
+        } else address = street+" "+house+", "+city;
         
         String qry = "INSERT INTO tblStudio (studioName, description, email, phone, address)\n"
                    + "VALUES('"+name+"','"+description+"','"+email+"','"+phone+"','"+address+"')";

@@ -132,6 +132,9 @@ public class AddWorkWithStudio extends javax.swing.JPanel {
     private void createButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createButtonActionPerformed
         int counter = 0;
         for (Switched s:switches) {
+            if (s.noSwitch()) {
+                continue;
+            }
             if (s.switchPos()) {
                 if (AddWorkWithStudioControl.insertWork(s.Studio)) {
                     counter++;
@@ -145,7 +148,12 @@ public class AddWorkWithStudio extends javax.swing.JPanel {
             "Working studios were updated!",
             "Updating complete",
             JOptionPane.INFORMATION_MESSAGE);
-        }
+            WindowManager.openWin(new AddWorkWithStudio());
+            return;
+        } else JOptionPane.showMessageDialog(null,
+            "No changes were detected!",
+            "Updating complete",
+            JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_createButtonActionPerformed
 
 public void setTable(){

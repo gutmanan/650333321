@@ -328,6 +328,7 @@ public class AddRecording extends javax.swing.JPanel {
     }//GEN-LAST:event_recordingComboBoxActionPerformed
 
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
+        
         if (AddRecordingControl.inseretNewRecording(recordingIDField.getText(), titleTextField1.getText(), String.valueOf(statusComboBox.getSelectedItem()), 
                 lyricTextField.getText(), lengthTextField.getText(), youtubeTextField.getText(), jList1.getModel().getSize()>0?jList1.getModel().getElementAt(0):" ", 
                 String.valueOf(recordingComboBox.getSelectedItem()), String.valueOf(sessionsComboBox.getSelectedItem()))) {
@@ -345,7 +346,7 @@ public class AddRecording extends javax.swing.JPanel {
             return;
         }
         recordingComboBox.removeAllItems();
-        recordingComboBox.addItem("Select Eecording");
+        recordingComboBox.addItem("Select Recording");
         jLabel8.setText("Date:");
         jLabel9.setText("Start time:");
         jLabel10.setText("Until:");

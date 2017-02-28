@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <MuzaMusic_Sessions>
-  <Artist id="19b9623">
+  <Artist id="03e96be">
     <stageName>Ben-El</stageName>
-    <email>tavori@gmail.com</email>
+    <email>benel@gmail.com</email>
   </Artist>
   <Artist id="2eba414">
     <stageName>wwe</stageName>
@@ -11,8 +11,12 @@
   <Artist id="4edd098">
     <stageName>mm</stageName>
     <email>asd@gmail.com</email>
+    <Session date="2017-02-28 00:00:00.0"/>
+    <Session date="2017-02-28 00:00:00.0"/>
+    <Session date="2017-02-28 00:00:00.0"/>
+    <Session date="2017-02-28 00:00:00.0"/>
   </Artist>
-  <Artist id="778ca14">
+  <Artist id="5dcab6a">
     <stageName>Static</stageName>
     <email>statboy@gmail.com</email>
   </Artist>

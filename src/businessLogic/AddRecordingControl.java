@@ -86,8 +86,13 @@ public abstract class AddRecordingControl {
             return false;
         }
         
-        String qry = "INSERT INTO tblRecording (RecordingID, title, status, lyricsLink, length, youtubeLink, zipFile, prevRecording, SessionNumber)\n"
-                   + "VALUES('"+recoID+"','"+title+"','"+status+"','"+lyric+"','"+length+"','"+youtube+"','"+file+"','"+prevrec+"','"+session+"')";
+        String noPrev = prevrec;
+        if (noPrev.equals("Select Recording")) {
+            noPrev = recoID;
+        }        
+        
+        String qry = "INSERT INTO tblRecording(RecordingID, title, status, lyricsLink, length, youtubeLink, zipFile, prevRecording, SessionNumber)"
+                   + " VALUES('"+recoID+"','"+title+"','"+status+"','"+lyric+"','"+length+"','"+youtube+"','"+file+"','"+noPrev+"','"+session+"')";
         if (DBManager.insert(qry) == -2) {
             JOptionPane.showMessageDialog(null, "The recording has been added successfully!");
             return true;

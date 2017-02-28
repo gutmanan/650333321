@@ -162,6 +162,9 @@
           <StringArray count="0"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cityComboBoxActionPerformed"/>
+      </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="for (E_CITIES e : ListOfCity(&quot;Israel&quot;))&#xa;     cityComboBox.addItem(e.toString());"/>
         <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="cityComboBox.addItem(&quot;Select City&quot;);"/>

@@ -40,6 +40,12 @@ public abstract class WindowManager {
         clean();
         SessionsInTheRoom.getDM().setVisible(false);
     }
+    public static void closeLogin() {
+        loginFrame.dispose();
+        mainFrame = new MainGui();
+        SessionsInTheRoom.getDM().setVisible(false);
+        setWelcome();
+    }
     public static void setCurrentWindow(JPanel panel) {
         currentWindow = panel;
     }

@@ -66,8 +66,8 @@ public class XMLManager {
             pulqry = "SELECT tblArtist.ArtistID\n"
                    + "FROM tblArtist\n"
                    + "WHERE tblArtist.ArtistID=\""+importedArtist.getAlphaCode()+"\"";
-            insqry = "INSERT INTO tblArtist (ArtistID, stageName, eMail, password)"
-                   + "VALUES('"+importedArtist.getAlphaCode()+"','"+importedArtist.getStageName()+"','"+importedArtist.getEmail()+"','"+importedArtist.getPassword()+"')";
+            insqry = "INSERT INTO tblArtist (ArtistID, stageName, eMail, password, isActive)"
+                   + "VALUES('"+importedArtist.getAlphaCode()+"','"+importedArtist.getStageName()+"','"+importedArtist.getEmail()+"','"+importedArtist.getPassword()+"','"+true+"')";
             ResultSet rs = DBManager.query(pulqry);
             try {
                 if (!rs.isBeforeFirst()) {

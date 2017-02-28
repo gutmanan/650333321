@@ -130,30 +130,15 @@ public abstract class DebugManager extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void adminBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adminBtnActionPerformed
-        if (WindowManager.getLoginFrame() == null)
-            return;
-        if (WindowManager.getMainFrame() != null)
-            WindowManager.closeMain();
-        WindowManager.getLoginFrame().extLogin("Admin", "Admin");
-        WindowManager.getLoginFrame().openMain();
+        MainLogicControl.openMain("Admin", "Admin", false);
     }//GEN-LAST:event_adminBtnActionPerformed
 
     private void artistBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_artistBtnActionPerformed
-        if (WindowManager.getLoginFrame() == null)
-            return;
-        if (WindowManager.getMainFrame() != null)
-            WindowManager.closeMain();
-        WindowManager.getLoginFrame().extLogin("anb@gmail.com", "123");
-        WindowManager.getLoginFrame().openMain();
+
     }//GEN-LAST:event_artistBtnActionPerformed
 
     private void freelancerBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_freelancerBtnActionPerformed
-        if (WindowManager.getLoginFrame() == null)
-            return;
-        if (WindowManager.getMainFrame() != null)
-            WindowManager.closeMain();
-        WindowManager.getLoginFrame().extLogin("avi@gmail.com", "123");
-        WindowManager.getLoginFrame().openMain();
+
     }//GEN-LAST:event_freelancerBtnActionPerformed
 
     public static void setDatabaseStatus(Boolean flag) {

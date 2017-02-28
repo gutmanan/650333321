@@ -51,7 +51,6 @@ public abstract class ReportProduceControl {
         }
         return recs;
     }
-    
     public static ArrayList<SoundManInSession> getSoundmans(Integer sessioID) {
         ResultSet rs = DBManager.query("SELECT tblSoundManWorkAs.*\n" +
                                        "FROM tblSoundManWorkAs\n" +
@@ -65,8 +64,7 @@ public abstract class ReportProduceControl {
             Logger.getLogger(ReportProduceControl.class.getName()).log(Level.SEVERE, null, ex);
         }
         return recs;
-    }
-    
+    }  
     public static ArrayList<Musician> getMusicians(Integer sessioID) {
         ResultSet rs = DBManager.query("SELECT tblMusician.*\n" +
 "FROM tblMusician INNER JOIN tblMusicianInSession ON tblMusician.MusicianID = tblMusicianInSession.MusicianID\n" +
@@ -80,5 +78,24 @@ public abstract class ReportProduceControl {
             Logger.getLogger(ReportProduceControl.class.getName()).log(Level.SEVERE, null, ex);
         }
         return recs;
+    }
+    public static boolean suspendArtist(String artist) {
+        String qry = "UPDATE tblArtist SET tblArtist.isActive = No\n" +
+                     "WHERE (((tblArtist.ArtistID)=\""+artist+"\"))";
+        ResultSet rs = DBManager.query("SELECT tblArtist.isActive\n" +
+                    "FROM tblArtist\n" +
+                    "WHERE (((tblArtist.isActive)=No)) AND (((tblArtist.ArtistID)=\""+artist+"\"))");
+       boolean flag = false;
+        try {
+            if (!rs.isBeforeFirst()) {
+                flag = true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ReportProduceControl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if (flag && DBManager.insert(qry) == -2) {
+            return true;
+        }
+        return false;
     }
 }

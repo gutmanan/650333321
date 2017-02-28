@@ -15,7 +15,9 @@ import entity.Room;
 import entity.SoundMan;
 import businessLogic.SessionsInTheRoom;
 import businessLogic.StudioRatesControl;
+import businessLogic.ValidatorManager;
 import businessLogic.WindowManager;
+import com.sun.org.apache.xerces.internal.impl.validation.ValidationManager;
 import entity.E_ROLE;
 import entity.RatingBarCell;
 import entity.SoundManInSession;
@@ -488,6 +490,26 @@ public class CreateSession extends javax.swing.JPanel {
         if (sessionDatePicker.getDate() == null) {
             return;
         }
+        if ((ValidatorManager.onlyContainsNumbers(startTextField.getText()))) {
+            Integer start = Integer.valueOf(startTextField.getText());
+            if (start < 0 || start > 24) {
+                JOptionPane.showMessageDialog(null, "Oh and yes, a number between 0 and 24...");
+                return;
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Start time must be a number.");
+            return;
+        }
+        if ((ValidatorManager.onlyContainsNumbers(endTextField.getText()))) {
+            Integer start = Integer.valueOf(endTextField.getText());
+            if (start < 0 || start > 24) {
+                JOptionPane.showMessageDialog(null, "Oh and yes, a number between 0 and 24...");
+                return;
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "End time must be a number.");
+            return;
+        }
         if (startTextField.getText().equals(endTextField.getText()) || (Integer.valueOf(startTextField.getText()).compareTo(Integer.valueOf(endTextField.getText()))) > 0) {
             JOptionPane.showMessageDialog(WindowManager.getMainFrame(), "End time must be greater than start time", "Input Warning", JOptionPane.WARNING_MESSAGE);
             startTextField.setText("");
@@ -526,6 +548,7 @@ public class CreateSession extends javax.swing.JPanel {
                 "Session was created successfully!",
                 "Setup complete",
                 JOptionPane.INFORMATION_MESSAGE);
+            WindowManager.openWin(new CreateSession());
             return;
         }
     }//GEN-LAST:event_createButtonActionPerformed
@@ -577,9 +600,11 @@ public class CreateSession extends javax.swing.JPanel {
     public boolean confirmMusicians(int sessionID) {
         int counter = 0;
         int anotherCounter = 0;
-        for (int i = 0; i < jTable3.getRowCount(); i++) {
-            int roomID = Integer.valueOf(String.valueOf(jTable3.getValueAt(i, 5)));
-            if (jTable3.getValueAt(i, 4) == null  || !(boolean)jTable3.getValueAt(i, 4)) {
+        int roomID = 0;
+        for (int i = 0; i < jTable3.getRowCount(); i++) {    
+            if (!String.valueOf(jTable3.getValueAt(i, 5)).equals("Select Room")) 
+                roomID = Integer.valueOf(String.valueOf(jTable3.getValueAt(i, 5)));
+            if (roomID == 0 || !(boolean)jTable3.getValueAt(i, 4)) {
                 continue;
             } else { 
                 anotherCounter++; 

@@ -6,6 +6,7 @@
 package boundary;
 
 import businessLogic.DBManager;
+import businessLogic.MainLogicControl;
 import entity.Artist;
 import businessLogic.SessionsInTheRoom;
 import businessLogic.WindowManager;
@@ -446,18 +447,21 @@ public class MainLogin extends javax.swing.JFrame {
 
     private void usernameAreaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_usernameAreaKeyPressed
         if(evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            openMain();
+            checkNewUser();
+            MainLogicControl.openMain(usernameArea.getText(), passwordArea.getText(), flag);
         }
     }//GEN-LAST:event_usernameAreaKeyPressed
 
     private void passwordAreaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passwordAreaKeyPressed
         if(evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            openMain();
+            checkNewUser();
+            MainLogicControl.openMain(usernameArea.getText(), passwordArea.getText(), flag);
         }
     }//GEN-LAST:event_passwordAreaKeyPressed
 
     private void loginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginBtnActionPerformed
-        openMain();
+        checkNewUser();
+        MainLogicControl.openMain(usernameArea.getText(), passwordArea.getText(), flag);
     }//GEN-LAST:event_loginBtnActionPerformed
 
     private void createUserBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createUserBtnActionPerformed
@@ -479,20 +483,7 @@ public class MainLogin extends javax.swing.JFrame {
         Integer birthDay = Integer.parseInt(String.valueOf(dayBox.getSelectedItem()));
         Date birthdate = new Date(birthYear, birthMonth, birthDay);
         Timestamp ts = new Timestamp(birthdate.getTime());
-        if (firstname.isEmpty() || lastname.isEmpty() || email.isEmpty() || password.isEmpty()) {
-            JOptionPane.showMessageDialog(newAccountFrame,
-                "Please fill all the fields first!",
-                "Input Error",
-                JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        String qry = "INSERT INTO tblFreelancer (FreelancerID, firstName, lastName, birthDate, eMail, stageName, Photo, password)"
-        + "VALUES('"+username+"','"+firstname+"','"+lastname+"','"+ts+"',\""+email+"\",'"+nickname+"',\""+profileLabel.getIcon()+"\",'"+password+"')";
-        if (DBManager.insert(qry) == -2) {
-            JOptionPane.showMessageDialog(newAccountFrame,
-                "Congratulations your account was created successfully!",
-                "Account was created",
-                JOptionPane.INFORMATION_MESSAGE);
+        if (MainLogicControl.newFreelancer(username, nickname, firstname, lastname, email, password, ts, profileLabel.getIcon())) {
             newAccountFrame.setVisible(false);
             WindowManager.clean();
             clearUserForm();
@@ -557,38 +548,11 @@ public class MainLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_createUserBtn1ActionPerformed
 
     private void registerButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerButton1ActionPerformed
-        if (flag) {
-            String qry = "UPDATE tblArtist SET tblArtist.password =\""+passwordField1.getText()+"\"\n" +
-                         "WHERE (((tblArtist.eMail)=\""+emailField1.getText()+"\") AND ((tblArtist.ArtistID)=\""+usernameField1.getText()+"\"))";
-            if (DBManager.insert(qry) == -2) {
-                JOptionPane.showMessageDialog(newAccountFrame1,
-                    "Password was updated successfully!",
-                    "Login setup",
-                    JOptionPane.INFORMATION_MESSAGE);
-                newAccountFrame1.setVisible(false);
-                WindowManager.clean();
-                clearUserForm();
-                return;
-            }
-        }
         String username = usernameField1.getText();
         String nickname = nicknameField1.getText();
         String email = emailField1.getText();
         String password = passwordField1.getText();
-        if (nickname.isEmpty() || email.isEmpty() || password.isEmpty()) {
-            JOptionPane.showMessageDialog(newAccountFrame1,
-                "Please fill all the fields first!",
-                "Input Error",
-                JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        String qry = "INSERT INTO tblArtist (ArtistID, stageName, eMail, password)"
-        + "VALUES('"+username+"','"+nickname+"','"+email+"','"+password+"')";
-        if (DBManager.insert(qry) == -2) {
-            JOptionPane.showMessageDialog(newAccountFrame1,
-                "Congratulations your account was created successfully!",
-                "Account was created",
-                JOptionPane.INFORMATION_MESSAGE);
+        if (MainLogicControl.newArtist(username, nickname, email, password , flag)) {
             newAccountFrame1.setVisible(false);
             WindowManager.clean();
             clearUserForm();
@@ -624,66 +588,6 @@ public class MainLogin extends javax.swing.JFrame {
         return bi;
     }
     
-    public void openMain() {
-        checkNewUser();
-        if (usernameArea.getText().equals("")) {
-            JOptionPane.showMessageDialog(this,
-                "You must enter username & password",
-                "Login error",
-                JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        if (usernameArea.getText().equals("Admin") && passwordArea.getText().equals("Admin")) {
-            WindowManager.setUser(2, null);
-            this.dispose();
-            WindowManager.startMain();
-            return;
-        } else {
-            ResultSet artists = SessionsInTheRoom.getDB().query("SELECT tblArtist.*\n" +
-                                                               "FROM tblArtist\n" +
-                                                               "WHERE tblArtist.eMail=\""+usernameArea.getText()+"\"");
-            ResultSet freelancers = SessionsInTheRoom.getDB().query("SELECT tblFreelancer.*\n" +
-                                                               "FROM tblFreelancer\n" +
-                                                               "WHERE tblFreelancer.eMail=\""+usernameArea.getText()+"\"");
-            try {
-                while (artists.next()) {
-                    if (artists.getString(4).equals(passwordArea.getText())) {
-                        WindowManager.setUser(1, new Artist(artists.getString(1), artists.getString(2), artists.getString(3), 
-                                                           artists.getString(4)));
-                        this.dispose();
-                        WindowManager.startMain();
-                        return;
-                    } 
-                }
-                while (freelancers.next()) {
-                    if (freelancers.getString(8).equals(passwordArea.getText())) {
-                        WindowManager.setUser(3, new Freelancer(freelancers.getString(1), freelancers.getString(2), freelancers.getString(3), 
-                                                        freelancers.getDate(4), freelancers.getString(5), freelancers.getString(6), freelancers.getString(8)));
-                        this.dispose();
-                        WindowManager.startMain();
-                        return;
-                    }
-                }
-            } catch (SQLException ex) {
-                Logger.getLogger(MainLogin.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        if (!flag) {
-            JOptionPane.showMessageDialog(this,
-                "Incorrect username or password",
-                "Login error",
-                JOptionPane.ERROR_MESSAGE);
-        }
-    }
-    
-    public void extLogin(String username, String password) {
-        if (username == null || password == null) {
-            return;
-        }
-        usernameArea.setText(username);
-        passwordArea.setText(password);
-    }
-    
     private void clearUserForm() {
         usernameField.setText("");
         usernameField.setText(UUID.randomUUID().toString().substring(0, 7));
@@ -702,6 +606,31 @@ public class MainLogin extends javax.swing.JFrame {
         passwordField1.setText("");
     }
     
+    private void checkNewUser() {
+        ResultSet newArtists = SessionsInTheRoom.getDB().query("SELECT tblArtist.*\n" +
+                                                               "FROM tblArtist\n" +
+                                                               "WHERE tblArtist.eMail=\""+usernameArea.getText()+"\"");
+        try {
+            while (newArtists.next()) {
+                if (newArtists.getString(4).equals("null")) {
+                    helloLabel.setVisible(true);
+                    hello2Label.setVisible(true);
+                    usernameField1.setText(newArtists.getString(1));
+                    nicknameField1.setText(newArtists.getString(2));
+                    nicknameField1.setEnabled(false);
+                    emailField1.setText(newArtists.getString(3));
+                    emailField1.setEnabled(false);
+                    BasicInternalFrameUI mashu = (BasicInternalFrameUI)newAccountFrame1.getUI();
+                    mashu.setNorthPane(null);
+                    newAccountFrame1.setBorder(null);
+                    newAccountFrame1.setVisible(true);
+                    flag = true;
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(MainLogin.class.getName()).log(Level.SEVERE, null, ex);
+        }    
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel birthdayLabel;
     private javax.swing.JButton cancelButton;
@@ -750,29 +679,4 @@ public class MainLogin extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> yearBox;
     // End of variables declaration//GEN-END:variables
 
-    private void checkNewUser() {
-        ResultSet newArtists = SessionsInTheRoom.getDB().query("SELECT tblArtist.*\n" +
-                                                               "FROM tblArtist\n" +
-                                                               "WHERE tblArtist.eMail=\""+usernameArea.getText()+"\"");
-        try {
-            while (newArtists.next()) {
-                if (newArtists.getString(4).equals("null")) {
-                    helloLabel.setVisible(true);
-                    hello2Label.setVisible(true);
-                    usernameField1.setText(newArtists.getString(1));
-                    nicknameField1.setText(newArtists.getString(2));
-                    nicknameField1.setEnabled(false);
-                    emailField1.setText(newArtists.getString(3));
-                    emailField1.setEnabled(false);
-                    BasicInternalFrameUI mashu = (BasicInternalFrameUI)newAccountFrame1.getUI();
-                    mashu.setNorthPane(null);
-                    newAccountFrame1.setBorder(null);
-                    newAccountFrame1.setVisible(true);
-                    flag = true;
-                }
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(MainLogin.class.getName()).log(Level.SEVERE, null, ex);
-        }    
-    }
 }

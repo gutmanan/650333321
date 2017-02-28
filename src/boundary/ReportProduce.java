@@ -176,9 +176,10 @@ public class ReportProduce extends javax.swing.JPanel {
         if (jComboBox1.getSelectedIndex()==0) {
             return;
         }
-        setTable();
-        jComboBox1.setEnabled(false);
-        jButton1.setEnabled(false);
+        if (ReportProduceControl.suspendArtist(String.valueOf(jComboBox1.getSelectedItem()))) {
+            JOptionPane.showMessageDialog(null, "The artist was suspended successfully!");
+            return;
+        } else JOptionPane.showMessageDialog(null, "The artist is already inactive");
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed

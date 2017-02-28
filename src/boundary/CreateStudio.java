@@ -16,6 +16,7 @@ import entity.Room;
 import entity.SoundMan;
 import businessLogic.SessionsInTheRoom;
 import businessLogic.WindowManager;
+import com.sun.org.apache.xerces.internal.impl.validation.ValidationManager;
 import entity.E_CITIES;
 import entity.Studio;
 import java.sql.ResultSet;
@@ -128,6 +129,11 @@ public class CreateStudio extends javax.swing.JPanel {
         cityComboBox.addItem("Select City");
         for (E_CITIES e : ListOfCity("Israel"))
         cityComboBox.addItem(e.toString());
+        cityComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cityComboBoxActionPerformed(evt);
+            }
+        });
         add(cityComboBox);
         cityComboBox.setBounds(190, 240, 180, 30);
         add(phoneField);
@@ -181,12 +187,18 @@ public class CreateStudio extends javax.swing.JPanel {
         String description = descriptionTextArea.getText();
         String email = emailField.getText();
         String phone = phoneField.getText();
-        String address = streetTextField.getText()+" "+houseTextField.getText()+", "+String.valueOf(cityComboBox.getSelectedItem());
-        if (CreateStudioControl.insertNewStudio(studioName, description, email, phone, address)) {
+        String street  = streetTextField.getText();
+        String house = houseTextField.getText();
+        String city = String.valueOf(cityComboBox.getSelectedItem());
+        if (CreateStudioControl.insertNewStudio(studioName, description, email, phone, street, house, city)) {
             WindowManager.openWin(new CreateStudio());
             return;
         }
     }//GEN-LAST:event_createButtonActionPerformed
+
+    private void cityComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cityComboBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cityComboBoxActionPerformed
 
 public List<E_CITIES> ListOfCity(String country){
     List<E_CITIES> cityList = new ArrayList<E_CITIES>();

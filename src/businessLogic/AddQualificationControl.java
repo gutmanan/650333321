@@ -54,7 +54,7 @@ public abstract class AddQualificationControl {
             return false;
         }
         
-        if (!(ValidatorManager.isAlpha(instrument))){
+        if (!(ValidatorManager.isAlpha(instrument)) || instrument.equals("Select Instrument") || instrument.isEmpty()){
             JOptionPane.showMessageDialog(null, "The Instrument field is incorrect.");
             return false;
         }
